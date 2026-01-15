@@ -8,7 +8,7 @@ User = get_user_model()
 
 class Baby(models.Model):
     parent = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50, default="My baby")
+    name = models.CharField(max_length=50)
     birth_date = models.DateField()
     weight = models.DecimalField(
         max_digits=4, decimal_places=2, null=True, help_text="Enter birth weight in kg"
@@ -16,7 +16,7 @@ class Baby(models.Model):
     height = models.DecimalField(
         max_digits=5, decimal_places=2, null=True, help_text="Enter birth height in cm"
     )
-    notes = models.TextField(
+    note = models.TextField(
         max_length=200, blank=True, help_text="e.g., hair and eye color, character"
     )
 
@@ -24,7 +24,7 @@ class Baby(models.Model):
         return self.name
 
 
-class GrowthMilestones(models.Model):
+class Growth(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     date = models.DateField()
     weight = models.DecimalField(
@@ -33,7 +33,7 @@ class GrowthMilestones(models.Model):
     height = models.DecimalField(
         max_digits=5, null=True, decimal_places=2, help_text="Enter height in cm"
     )
-    milestone_note = models.TextField(
+    note = models.TextField(
         max_length=200, blank=True, help_text="e.g., First Smile, Crawling, New word"
     )
 
@@ -72,13 +72,13 @@ class Feeding(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     time = models.DateTimeField()
 
-    feed_type = models.IntegerField(
+    feed_type = models.PositiveSmallIntegerField(
         choices=FeedingType.choices,
         default=FeedingType.BREAST,
     )
 
     amount = models.FloatField(help_text="Amount in ml or grams")
-    notes = models.TextField(blank=True)
+    note = models.TextField(blank=True)
 
     @property
     def formatted_time(self):
