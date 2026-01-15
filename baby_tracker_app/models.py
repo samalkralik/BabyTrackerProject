@@ -46,17 +46,43 @@ class Sleep(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
 
+    @property
+    def sleep_duration(self):
+        if self.start_time and self.end_time:
+            duration = self.end_time - self.start_time
+            total_seconds = int(duration.total_seconds())
+
+            hours = total_seconds // 3600
+            minutes = (total_seconds % 3600) // 60
+
+            return f"{hours}h {minutes}m"
+        return "0h 0m"
+
     def __str__(self):
-        return f"{self.baby} slept for {self.end_time - self.start_time}"
+        return f"{self.baby} slept for {self.sleep_duration}"
+
+
+class FeedingType(models.IntegerChoices):
+    BREAST = 1, "Breast"
+    BOTTLE = 2, "Bottle"
+    SOLID = 3, "Solid"
 
 
 class Feeding(models.Model):
-    FEED_TYPES = [("breast", "Breast"), ("bottle", "Bottle"), ("solid", "Solid")]
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
-    time = models.DateTimeField(auto_now_add=True)
-    feed_type = models.CharField(max_length=10, choices=FEED_TYPES)
+    time = models.DateTimeField()
+
+    feed_type = models.IntegerField(
+        choices=FeedingType.choices,
+        default=FeedingType.BREAST,
+    )
+
     amount = models.FloatField(help_text="Amount in ml or grams")
     notes = models.TextField(blank=True)
 
+    @property
+    def formatted_time(self):
+        return self.time.strftime("%H:%M")
+
     def __str__(self):
-        return f"{self.baby}'s last feeding was at {self.time}"
+        return f"{self.baby}'s feeding at {self.formatted_time}"
