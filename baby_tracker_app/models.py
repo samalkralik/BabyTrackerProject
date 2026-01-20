@@ -9,13 +9,6 @@ User = get_user_model()
 class Baby(models.Model):
     parent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    birth_date = models.DateField()
-    weight = models.DecimalField(
-        max_digits=4, decimal_places=2, null=True, help_text="Enter birth weight in kg"
-    )
-    height = models.DecimalField(
-        max_digits=5, decimal_places=2, null=True, help_text="Enter birth height in cm"
-    )
     note = models.TextField(
         max_length=200, blank=True, help_text="e.g., hair and eye color, character"
     )
