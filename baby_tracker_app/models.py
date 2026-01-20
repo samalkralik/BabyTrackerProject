@@ -9,7 +9,6 @@ User = get_user_model()
 class Baby(models.Model):
     parent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=50, blank=True)
     note = models.TextField(
         max_length=200, blank=True, help_text="e.g., hair and eye color, character"
     )
