@@ -9,6 +9,7 @@ User = get_user_model()
 class Baby(models.Model):
     parent = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
+    gender = models.CharField(max_length=1, choices=[("M", "Male"), ("F", "Female")])
     note = models.TextField(
         max_length=200, blank=True, help_text="e.g., hair and eye color, character"
     )
