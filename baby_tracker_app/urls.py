@@ -1,37 +1,19 @@
 from django.urls import path
+from django.shortcuts import HttpResponse
+from baby_tracker_app import views
 
 
 def test_view(request, **kwargs):
-    from django.shortcuts import HttpResponse
-
     return HttpResponse("test page: " + request.path)
 
 
 urlpatterns = [
-    path("", test_view),
-    path("home/", test_view),
+    path("", views.index_view),
     path("login/", test_view),
-    path("baby-overview/", test_view),
-    path("baby-overview/add/", test_view),
-    path("baby-overview/<int:baby_id>/", test_view),
-    path("baby-overview/<int:baby_id>/growth/", test_view),
-    path("baby-overview/<int:baby_id>/feeding/", test_view),
-    path("baby-overview/<int:baby_id>/sleep/", test_view),
+    path("overview/", views.overview_view),
+    path("overview/add/", test_view),  # add_baby_view
+    path("overview/<int:baby_id>/", views.baby_detail_view),
+    path("overview/<int:baby_id>/growth/", test_view),  # overview_id_growth_view
+    path("overview/<int:baby_id>/feeding/", views.baby_feeding_view),
+    path("overview/<int:baby_id>/sleep/", test_view),  # overview_id_sleep_view
 ]
-
-"""
-- home page
-  /home/
-
-- log in/ sign in
- /login/
-
-- dashboard
-  /overview/
-  /overview/add-baby/
-
-
-- baby details
-  /baby/{baby_id}/growth
-  /baby/{baby_id}/feeding
-"""
