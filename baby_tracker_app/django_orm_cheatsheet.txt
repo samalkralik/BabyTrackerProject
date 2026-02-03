@@ -1,0 +1,37 @@
+Querying (Čtení)
+Vše: MyModel.objects.all()
+
+Filtr: MyModel.objects.filter(is_active=True)
+
+Jeden objekt: MyModel.objects.get(id=1)
+
+Vyloučení: MyModel.objects.exclude(name='Secret')
+
+Seřazení: MyModel.objects.order_by('name')
+
+Limit/Offset: MyModel.objects.all()[:10]
+
+3. Field Lookups (Lookupy)
+Klíčové slovo: filter(name__icontains='gym') (Case-insensitive vyhledávání)
+
+Větší než: filter(id__gt=5)
+
+Seznam hodnot: filter(id__in=[1, 2, 3])
+
+IsNull: filter(description__isnull=True)
+
+4. Create / Update / Delete
+Vytvoření: obj = MyModel.objects.create(name='Test')
+
+Uložení: obj.save()
+
+Hromadný update: MyModel.objects.filter(is_active=False).update(is_active=True)
+
+Smazání: obj.delete() nebo MyModel.objects.all().delete()
+
+5. Relations (Vztahy)
+Foreign Key: models.ForeignKey('OtherModel', on_delete=models.CASCADE)
+
+Many to Many: models.ManyToManyField('OtherModel')
+
+Reverse lookup: other_obj.mymodel_set.all()
