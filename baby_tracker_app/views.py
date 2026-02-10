@@ -18,9 +18,6 @@ def baby_create_view(request):
             instance.parent = request.user
             instance.save()
             return redirect("/overview/")
-        else:
-            # This will tell you EXACTLY what is wrong in the console
-            print("FORM ERRORS:", form.errors.as_data())
 
         print(form.is_valid())
         print(form.cleaned_data)
@@ -62,10 +59,6 @@ def overview_view(request):
 def baby_detail_view(request, baby_id):
     baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
 
-    feeding_form = FeedingForm()
-    sleep_form = SleepForm()
-    growth_form = GrowthForm()
-
     if request.method == "POST":
         if "submit_feeding" in request.POST:
 
@@ -99,7 +92,11 @@ def baby_detail_view(request, baby_id):
                 instance.save()
                 return redirect("baby_detail", baby_id=baby.id)
 
-    # Get existing data to show in the tabs
+    feeding_form = FeedingForm()
+    sleep_form = SleepForm()
+    growth_form = GrowthForm()
+
+    # existing data to show in the tabs
     feedings = Feeding.objects.filter(baby=baby).order_by("-time")[:5]
     sleeps = Sleep.objects.filter(baby=baby).order_by("-start_time")[:5]
     growths = Growth.objects.filter(baby=baby).order_by("-date")[:5]
