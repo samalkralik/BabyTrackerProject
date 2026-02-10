@@ -1,0 +1,63 @@
+{% extends 'baby_tracker_app/_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block base_content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/overview/">Overview</a></li>
+            <li class="breadcrumb-item"><a href="/overview/{{ baby.pk }}/">{{ baby.name }}</a></li>
+            <li class="breadcrumb-item active">Growth Tracker</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card card-body shadow-sm border-info">
+                <h3 class="fw-bold text-info">📈 New Measurement</h3>
+                <form method="POST" class="row g-3">
+                    {% csrf_token %}
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-4">{{ form.date|as_crispy_field }}</div>
+                            <div class="col-md-4">{{ form.weight|as_crispy_field }}</div>
+                            <div class="col-md-4">{{ form.height|as_crispy_field }}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-grid align-items-end mb-3">
+                        <button type="submit" class="btn btn-info text-white">Save Stats</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <h3 class="fw-bold">Growth History</h3>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered shadow-sm bg-white">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Date</th>
+                            <th>Weight (kg)</th>
+                            <th>Height (cm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for g in growths %}
+                        <tr>
+                            <td>{{ g.date|date:"d.m.Y" }}</td>
+                            <td>{{ g.weight }} kg</td>
+                            <td>{{ g.height }} cm</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No measurements recorded yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

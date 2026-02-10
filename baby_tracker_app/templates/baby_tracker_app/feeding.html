@@ -1,0 +1,39 @@
+{% extends 'baby_tracker_app/_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block base_content %}
+<div class="container mt-4">
+    <a href="/overview/{{ baby.pk }}/" class="btn btn-outline-secondary mb-3">← Back to {{ baby.name }}</a>
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">🍼 Log Feeding</h3>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary w-100">Save Feeding</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <h3>Recent History</h3>
+            <div class="list-group">
+                {% for f in feedings %}
+                <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ f.amount }} ml</strong> of {{ f.get_feed_type_display }}
+                    </div>
+                    <span class="text-muted">{{ f.time|date:"d.m. H:i" }}</span>
+                </div>
+                {% empty %}
+                <p class="text-muted">No feedings logged yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

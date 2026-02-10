@@ -1,0 +1,48 @@
+{% extends 'baby_tracker_app/_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block base_content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/overview/">Overview</a></li>
+            <li class="breadcrumb-item"><a href="/overview/{{ baby.pk }}/">{{ baby.name }}</a></li>
+            <li class="breadcrumb-item active">Sleep Logger</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h3 class="fw-bold text-success mb-3">🌙 Log Sleep</h3>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-success w-100">Save Sleep Session</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <h3 class="fw-bold">Recent Naps</h3>
+            <div class="list-group">
+                {% for s in sleeps %}
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1">Duration: {{ s.sleep_duration }}</h5>
+                        <small class="text-muted">{{ s.start_time|date:"D, d.m." }}</small>
+                    </div>
+                    <p class="mb-1 text-secondary">
+                        From: {{ s.start_time|date:"H:i" }} — To: {{ s.end_time|date:"H:i" }}
+                    </p>
+                </div>
+                {% empty %}
+                <p class="text-muted">No sleep records found yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

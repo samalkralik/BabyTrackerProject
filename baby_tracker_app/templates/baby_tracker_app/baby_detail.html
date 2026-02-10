@@ -1,97 +1,70 @@
 {% extends 'baby_tracker_app/_base.html' %}
-{% load crispy_forms_tags %}
 
 {% block base_content %}
-<div class="container">
-    <h2>Tracking: {{ baby.name }}</h2>
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4">{{ baby.name }}'s Dashboard</h1>
+        <p class="text-muted">Born on: {{ baby.birth_date }}</p>
+    </div>
 
-    <ul class="nav nav-pills" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-feeding-tab" data-bs-toggle="pill" data-bs-target="#pills-feeding"
-                type="button">🍼 Feeding</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-sleep-tab" data-bs-toggle="pill" data-bs-target="#pills-sleep"
-                type="button">🌙 Sleep</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-growth-tab" data-bs-toggle="pill" data-bs-target="#pills-growth"
-                type="button">📈 Growth</button>
-        </li>
-    </ul>
+    {% if baby.image %}
+    <img src="{{ baby.image.url }}" alt="">
+    {% endif %}
 
-    <div class="tab-content border" id="pills-tabContent"></div>
-    <div class="tab-pane fade show active" id="pills-feeding" role="tabpanel">
-        <div class="row">
-            <div class="col-md-5 border-end">
-                <h4 class="fw-bold">Log Feeding</h4>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ feeding_form|crispy }}
-                    <button type="submit" name="submit_feeding" class="btn btn-get-started w-100">Save Feed</button>
-                </form>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-primary">
+                <div class="card-body text-center">
+                    <h3 class="card-title">🍼 Feeding</h3>
+                    <p class="small text-muted">
+                        Last:
+                        {% if latest_feeding %}
+                        {{ latest_feeding.amount }}ml at
+                        {{ latest_feeding.time|date:"H:i"}}
+                        {% else %}No data
+                        {% endif %}
+                    </p>
+                    <a href="/overview/{{ baby.pk }}/feeding/" class="btn btn-primary w-100 mt-2">Log
+                        Milk</a>
+                </div>
             </div>
-            <div class="col-md-7 ps-4">
-                <h4 class="fw-bold">Recent Feeds</h4>
-                <ul class="list-group">
-                    {% for f in feedings %}
-                    <li class="list-group-item d-flex justify-content-between">
-                        <span>{{ f.get_feed_type_display }}</span>
-                        <strong>{{ f.amount }} ml</strong>
-                        <small class="text-muted">{{ f.formatted_time }}</small>
-                    </li>
-                    {% endfor %}
-                </ul>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-body text-center">
+                    <h3 class="card-title">🌙 Sleep</h3>
+                    <p class="small text-muted">
+                        Last: {% if latest_sleep %}
+                        {{ latest_sleep.start_time|date:"d.m. H:i" }}
+                        {% else %}No data
+                        {%endif %}
+                    </p>
+                    <a href="/overview/{{ baby.pk }}/sleep/" class="btn btn-success w-100 mt-2">Log
+                        Sleep</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-info">
+                <div class="card-body text-center">
+                    <h3 class="card-title">📈 Growth</h3>
+                    <p class="small text-muted">
+                        Last Weight: {% if latest_growth %}
+                        {{ latest_growth.weight }}kg
+                        {% else %}No data
+                        {% endif %}
+                    </p>
+                    <a href="/overview/{{ baby.pk }}/growth/" class="btn btn-info text-white w-100 mt-2">Update
+                        Stats</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="tab-pane fade" id="pills-sleep" role="tabpanel">
-        <div class="row">
-            <div class="col-md-5 border-end">
-                <h4 class="fw-bold">Log Sleep</h4>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ sleep_form|crispy }}
-                    <button type="submit" name="submit_sleep" class="btn btn-get-started w-100">Save Sleep</button>
-                </form>
-            </div>
-            <div class="col-md-7 ps-4">
-                <h4 class="fw-bold">Last Naps</h4>
-                {% for s in sleeps %}
-                <div class="alert alert-info py-2">Slept: {{ s.sleep_duration }}</div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <div class="tab-pane fade" id="pills-growth" role="tabpanel">
-        <h4 class="fw-bold">Growth History</h4>
-        <form method="POST" class="mb-4 row">
-            {% csrf_token %}
-            <div class="col-md-10">{{ growth_form|crispy }}</div>
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" name="submit_growth" class="btn btn-get-started w-100 mb-3">Save</button>
-            </div>
-        </form>
-        <table class="table table-hover mt-3">
-            <thead class="table-dark">
-                <tr>
-                    <th>Date</th>
-                    <th>Weight (kg)</th>
-                    <th>Height (cm)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for g in growths %}
-                <tr>
-                    <td>{{ g.date }}</td>
-                    <td>{{ g.weight }}</td>
-                    <td>{{ g.height }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="text-center mt-5">
+        <a href="{/overview/}" class="text-decoration-none text-secondary">← Back to Overview</a>
     </div>
 </div>
 {% endblock %}

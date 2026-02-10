@@ -9,8 +9,9 @@ class BabyTrackerForm(forms.ModelForm):
 
 
 class GrowthForm(forms.ModelForm):
-    model = Growth
-    fields = ["date", "weight", "height", "note"]
+    class Meta:
+        model = Growth
+        fields = ["date", "weight", "height", "note"]
 
 
 class FeedingForm(forms.ModelForm):

@@ -8,6 +8,7 @@ def index_view(request):
     return render(request, "baby_tracker_app/index.html")
 
 
+@login_required
 def baby_create_view(request):
     if request.method == "POST":
 
@@ -59,58 +60,85 @@ def overview_view(request):
 def baby_detail_view(request, baby_id):
     baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
 
-    if request.method == "POST":
-        if "submit_feeding" in request.POST:
-
-            feeding_form = FeedingForm(request.POST)
-
-            if feeding_form.is_valid():
-                instance = feeding_form.save(commit=False)
-                instance.baby = baby
-                instance.save()
-                return redirect(
-                    "baby_detail", baby_id=baby.id
-                )  # instead of hardcoded path like /overview/5/
-
-        elif "submit_sleep" in request.POST:
-
-            sleep_form = SleepForm(request.POST)
-
-            if sleep_form.is_valid():
-                instance = sleep_form.save(commit=False)
-                instance.baby = baby
-                instance.save()
-                return redirect("baby_detail", baby_id=baby.id)
-
-        elif "submit_growth" in request.POST:
-
-            growth_form = GrowthForm(request.POST)
-
-            if growth_form.is_valid():
-                instance = growth_form.save(commit=False)
-                instance.baby = baby
-                instance.save()
-                return redirect("baby_detail", baby_id=baby.id)
-
-    feeding_form = FeedingForm()
-    sleep_form = SleepForm()
-    growth_form = GrowthForm()
-
-    # existing data to show in the tabs
-    feedings = Feeding.objects.filter(baby=baby).order_by("-time")[:5]
-    sleeps = Sleep.objects.filter(baby=baby).order_by("-start_time")[:5]
-    growths = Growth.objects.filter(baby=baby).order_by("-date")[:5]
+    # the LATEST entry for each category to show a "Status"
+    latest_feeding = Feeding.objects.filter(baby=baby).order_by("-time").first()
+    latest_sleep = Sleep.objects.filter(baby=baby).order_by("-start_time").first()
+    latest_growth = Growth.objects.filter(baby=baby).order_by("-date").first()
 
     context = {
         "baby": baby,
-        "feeding_form": feeding_form,
-        "sleep_form": sleep_form,
-        "growth_form": growth_form,
-        "feedings": feedings,
-        "sleeps": sleeps,
-        "growths": growths,
+        "latest_feeding": latest_feeding,
+        "latest_sleep": latest_sleep,
+        "latest_growth": latest_growth,
     }
     return render(request, "baby_tracker_app/baby_detail.html", context)
+
+
+@login_required
+def feeding_view(request, baby_id):
+    baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
+
+    if request.method == "POST":
+        form = FeedingForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.baby = baby
+            instance.save()
+            return redirect("feeding_view", baby_id=baby.id)
+    else:
+        form = FeedingForm()
+
+    feedings = Feeding.objects.filter(baby=baby).order_by("-time")[:10]
+    return render(
+        request,
+        "baby_tracker_app/feeding.html",
+        {"baby": baby, "form": form, "feedings": feedings},
+    )
+
+
+@login_required
+def sleep_view(request, baby_id):
+    baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
+
+    if request.method == "POST":
+        form = SleepForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.baby = baby
+            instance.save()
+            return redirect("sleep_view", baby_id=baby.id)
+    else:
+        form = SleepForm()
+
+    sleeps = Sleep.objects.filter(baby=baby).order_by("-start_time")[:10]
+    return render(
+        request,
+        "baby_tracker_app/sleep.html",
+        {"baby": baby, "form": form, "sleeps": sleeps},
+    )
+
+
+@login_required
+def growth_view(request, baby_id):
+    baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
+
+    if request.method == "POST":
+        form = GrowthForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.baby = baby
+            instance.save()
+            return redirect("growth_view", baby_id=baby.id)
+    else:
+        form = GrowthForm()
+
+    growths = Growth.objects.filter(baby=baby).order_by("-date")
+
+    return render(
+        request,
+        "baby_tracker_app/growth.html",
+        {"baby": baby, "form": form, "growths": growths},
+    )
 
 
 """
