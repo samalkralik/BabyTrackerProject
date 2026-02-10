@@ -1,5 +1,47 @@
 {% extends 'baby_tracker_app/_base.html' %}
 
+{% block nav_links %}
+<li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+<li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+{% endblock %}
+
 {% block base_content %}
-<h1>Main page/index page</h1>
+<section class="container row mt-5 mb-6 pt-5">
+    <div class="col">
+        <h1 class="display--5 mb-5 pb-5">Welcome to your personalized baby tracker app!</h1>
+        <h2 class="display--7"> It helps navigate the ups and downs of your baby's
+            behavior</h2>
+        <a href=" #" class="btn btn-primary">GET STARTED NOW!</a>
+    </div>
+
+    <div class="col col-5 mb-5">
+        <img src="https://placehold.co/200" class="img-fluid" alt="...">
+    </div>
+
+    <hr>
+</section>
+
+<div id="about" class="container">
+    <h2 class="display--7" style="max-width: 600px;">
+        Baby Tracker App makes parenting easier by keeping growth milestones and sleep schedules all in one place
+    </h2>
+    <hr>
+</div>
+
+<div id="features" class="container">
+    <div class="row text-center py-4">
+        <div class="col-md-4">
+            <div class="fs-1 mb-2">🍼</div>
+            <p class="fw-bold">Track every meal</p>
+        </div>
+        <div class="col-md-4">
+            <div class="fs-1 mb-2">🌙</div>
+            <p class="fw-bold">Analyze naps</p>
+        </div>
+        <div class="col-md-4">
+            <div class="fs-1 mb-2">📈</div>
+            <p class="fw-bold">Monitor weight/height</p>
+        </div>
+    </div>
+</div>
 {% endblock %}

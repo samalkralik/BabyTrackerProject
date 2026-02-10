@@ -1,0 +1,17 @@
+{% extends 'baby_tracker_app/_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block base_content %}
+
+<div class="mt-4" style="max-width: 480px; margin: 0 auto;">
+    <h1 class="fw-bold mb-4">Create new baby profile</h1>
+
+    <form action="{{ request.path }}" method="POST">
+        {% csrf_token %} <!-- for safety from django-->
+
+        {{ form|crispy }}
+    </form>
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>
+
+{% endblock %}
