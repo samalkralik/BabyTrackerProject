@@ -1,21 +1,44 @@
 {% extends 'baby_tracker_app/_base.html' %}
 
 {% block base_content %}
-<h1>overview of all babies</h1>
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-dark">Overview of all babies</h1>
 
-<div>
-    {{ babies }} {{ request }} {{ name }}
-</div>
+        <a href="/overview/add/" class="btn btn-success rounded-pill px-4 mt-2 shadow-sm">
+            <i class="bi bi-plus-lg"></i> Add New Baby
+        </a>
+    </div>
 
-{% for baby in babies %}
-<div class="col">
-    <div class="card" style="max-width: calc(320px - 1.5rem)">
-        <img src="https://placehold.co/200" class="card-img-top" alt="...">
-        <div class="card-body">
-            <p class="card-text">{{ baby.baby_id }} {{ baby.name }}</p>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 gy-4 justify-content-center">
+        {% for baby in babies %}
+        <div class="col d-flex justify-content-center">
+            <div class="card shadow-sm border-0 h-100"
+                style="width: 100%; max-width: 300px; border-radius: 15px; overflow: hidden;">
+
+                {% if baby.image %}
+                <img src="{{ baby.image.url }}" class="card-img-top" alt="{{ baby.name }}"
+                    style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="bi bi-person-fill text-secondary" style="font-size: 4rem;"></i>
+                </div>
+                {% endif %}
+
+                <div class="card-body text-center bg-white">
+                    <h5 class="card-title fw-bold text-dark mb-1">{{ baby.name }}</h5>
+                    <p class="text-muted small mb-3">ID: {{ baby.baby_id }}</p>
+
+                    <a href="/overview/{{ baby.pk }}/" class="btn btn-outline-danger btn-sm rounded-pill px-3">View
+                        Profile</a>
+                </div>
+            </div>
         </div>
+        {% empty %}
+        <div class="text-center w-100 py-5">
+            <p class="text-muted">No babies tracked yet. Click the button above to start!</p>
+        </div>
+        {% endfor %}
     </div>
 </div>
-{% endfor %}
-
 {% endblock %}
