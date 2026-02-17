@@ -8,11 +8,15 @@ def index_view(request):
     return render(request, "baby_tracker_app/index.html")
 
 
+def account_view(request):
+    return render(request, "baby_tracker_app/account.html")
+
+
 @login_required
 def baby_create_view(request):
     if request.method == "POST":
 
-        form = BabyTrackerForm(request.POST)
+        form = BabyTrackerForm(request.POST, request.FILES)
 
         if form.is_valid():
             instance = form.save(commit=False)
@@ -25,22 +29,6 @@ def baby_create_view(request):
     else:
         form = BabyTrackerForm()  # handles GET request
 
-    """
-    if request.method == "GET":
-        form = BabyTrackerForm()
-    else:
-        form = BabyTrackerForm(request.POST)
-
-        if form.is_valid():
-            instance = form.save(commit=False)  # form.save() vraci instanci
-            instance.parent = request.user
-            instance.save()
-            print("instance.pk:", instance.pk)
-            return redirect("/overview/")
-
-        print(form.is_valid())
-        print(form.cleaned_data)
-    """
     # template_name = 'nazev_app/nazev_modulu_form.html
     return render(request, "baby_tracker_app/baby_tracker_form.html", {"form": form})
 
@@ -84,7 +72,8 @@ def feeding_view(request, baby_id):
             instance = form.save(commit=False)
             instance.baby = baby
             instance.save()
-            return redirect("feeding_view", baby_id=baby.id)
+            return redirect(request.path)
+            # return redirect("/overview/{baby.id}/feeding/", baby_id=baby.id)
     else:
         form = FeedingForm()
 
@@ -106,7 +95,8 @@ def sleep_view(request, baby_id):
             instance = form.save(commit=False)
             instance.baby = baby
             instance.save()
-            return redirect("sleep_view", baby_id=baby.id)
+            # return redirect("/overview/{baby.id}/sleep/", baby_id=baby.id)
+            return redirect(request.path)
     else:
         form = SleepForm()
 
@@ -128,7 +118,8 @@ def growth_view(request, baby_id):
             instance = form.save(commit=False)
             instance.baby = baby
             instance.save()
-            return redirect("growth_view", baby_id=baby.id)
+            return redirect(request.path)
+            # return redirect("/overview/{baby.id}/growth/", baby_id=baby.id)
     else:
         form = GrowthForm()
 

@@ -10,6 +10,7 @@ def test_view(request, **kwargs):
 urlpatterns = [
     path("", views.index_view),
     path("login/", test_view),
+    path("accounts/profile/", views.account_view),
     path("overview/", views.overview_view),
     path("overview/add/", views.baby_create_view),  # add_baby_view
     path("overview/<int:baby_id>/", views.baby_detail_view),

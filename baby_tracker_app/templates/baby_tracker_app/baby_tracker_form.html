@@ -6,7 +6,7 @@
 <div class="mt-4" style="max-width: 480px; margin: 0 auto;">
     <h1 class="fw-bold mb-4">Create new baby profile</h1>
 
-    <form action="{{ request.path }}" method="POST" id="form1">
+    <form action="{{ request.path }}" method="POST" id="form1" enctype="multipart/form-data">
         {% csrf_token %} <!-- for safety from django-->
 
         {{ form|crispy }}

@@ -8,14 +8,15 @@
 {% block base_content %}
 <section class="row align-items-center py-5 my-lg-5">
     <div class="col-lg-7 text-center text-lg-start mb-5 mb-lg-0">
-        <h1 class="display-3 fw-bold text-dark mb-4 lh-sm">
+        <h1 class="display-4 fw-bold text-dark mb-4 lh-sm">
             Welcome to your <span class="text-success">personalized</span> baby tracker app!
         </h1>
-        <h2 class="h4 text-muted mb-5 lh-base" style="max-width: 550px;">
+        <h2 class="h4 text-muted mb-5 lh-base">
             Helping you navigate the ups and downs of your baby's behavior with ease and confidence.
         </h2>
 
-        <a href="#" class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow-sm fw-bold border-0">
+        <a href="{% if user.is_authenticated %}/overview/{% else %}/accounts/login/{% endif %}"
+            class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow-sm fw-bold border-0">
             GET STARTED NOW! <i class="bi bi-arrow-right-short ms-2"></i>
         </a>
     </div>
