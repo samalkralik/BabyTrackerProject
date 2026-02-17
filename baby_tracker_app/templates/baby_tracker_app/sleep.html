@@ -3,13 +3,7 @@
 
 {% block base_content %}
 <div class="container mt-4">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/overview/">Overview</a></li>
-            <li class="breadcrumb-item"><a href="/overview/{{ baby.pk }}/">{{ baby.name }}</a></li>
-            <li class="breadcrumb-item active">Sleep Logger</li>
-        </ol>
-    </nav>
+    <a href="/overview/{{ baby.pk }}/" class="btn btn-outline-secondary mb-3">← Back to {{ baby.name }}</a>
 
     <div class="row">
         <div class="col-md-5">

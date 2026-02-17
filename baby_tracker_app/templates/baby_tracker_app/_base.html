@@ -19,7 +19,7 @@
     </style>
 </head>
 
-<body style="font-family: 'Google Sans Code'; background-color: #f8f9f2; line-height: 1.8;">
+<body style="font-family: 'Google Sans Code'; background-color: #f8f9f2; line-height: 1.8; height: 100%">
     <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
@@ -39,32 +39,32 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-5">
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-5 text-muted">
                     {% block nav_links %}
                     {% endblock %}
 
                     <hr class="d-lg-none my-2 text-muted">
 
                     {% if user.is_authenticated %}
-                    <li class="nav-item px-lg-3 py-1 small text-muted d-lg-none">
-                        User: {{ user.username }}
-                    </li>
                     <li class="nav-item fw-bold px-3">
                         <a class="nav-link" href="/overview/">Baby Overview</a>
                     </li>
                     <li class="nav-item fw-bold px-3">
                         <a class="nav-link" href="#">Settings</a>
                     </li>
+                    <li class="nav-item fw-bold px-3">
+                        User: {{ user.username }}
+                    </li>
                     <li class="nav-item fw-bold mt-2 mt-lg-0 ms-lg-2">
-                        <form action="/logout/" method="post">
+                        <form action="/accounts/logout/" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3">Log Out</button>
                         </form>
                     </li>
                     {% else %}
                     <li class="nav-item fw-bold px-3">
-                        <a class="btn btn-outline-primary btn-sm rounded-pill px-4" href="/login/">Log In</a>
+                        <a class="btn btn-outline-primary btn-sm rounded-pill px-4" href="/accounts/login/">Log In</a>
                     </li>
                     {% endif %}
                 </ul>
@@ -72,12 +72,17 @@
         </div>
     </nav>
 
+    <p>TODO:</p>
+    <p> 1. Page for user Settings</p>
+    <p> 2. Connect GET STARTED NOW to User creation</p>
+    <p> 3. Baby creation form need Image upload?</p>
+    <p> 4. Sleep,feeding,growth form: DATETIME input problem + Save button direction?</p>
     <main class="container">
         {% block base_content %}
         {% endblock %}
     </main>
 
-    <footer class="py-4 mt-auto border-top">
+    <footer class="py- mt-5 border-top">
         <div class="container text-center">
             <p class="mb-0 text-muted">&copy; 2026 BabyTrackerApp.</p>
         </div>

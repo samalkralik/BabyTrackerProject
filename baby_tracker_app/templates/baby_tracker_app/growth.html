@@ -3,19 +3,13 @@
 
 {% block base_content %}
 <div class="container mt-4">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/overview/">Overview</a></li>
-            <li class="breadcrumb-item"><a href="/overview/{{ baby.pk }}/">{{ baby.name }}</a></li>
-            <li class="breadcrumb-item active">Growth Tracker</li>
-        </ol>
-    </nav>
+    <a href="/overview/{{ baby.pk }}/" class="btn btn-outline-secondary mb-3">← Back to {{ baby.name }}</a>
 
     <div class="row">
         <div class="col-md-12 mb-4">
             <div class="card card-body shadow-sm border-info">
                 <h3 class="fw-bold text-info">📈 New Measurement</h3>
-                <form method="POST" class="row g-3">
+                <form action="{{ request.path }}" method="POST" class="row g-3">
                     {% csrf_token %}
                     <div class="col-md-10">
                         <div class="row">
@@ -25,7 +19,7 @@
                         </div>
                     </div>
                     <div class="col-md-2 d-grid align-items-end mb-3">
-                        <button type="submit" class="btn btn-info text-white">Save Stats</button>
+                        <button type="submit" class="btn btn-info text-white">Save</button>
                     </div>
                 </form>
             </div>
