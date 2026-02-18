@@ -5,7 +5,8 @@ from baby_tracker_app.models import Baby, Growth, Feeding, Sleep
 class BabyTrackerForm(forms.ModelForm):
     class Meta:
         model = Baby
-        fields = ["name", "image", "note"]
+        fields = ["name", "birth_date", "gender", "image", "note"]
+        widgets = {"birth_date": forms.DateInput(attrs={"type": "date"})}
 
 
 class GrowthForm(forms.ModelForm):

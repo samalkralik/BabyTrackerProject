@@ -8,7 +8,7 @@ def index_view(request):
     return render(request, "baby_tracker_app/index.html")
 
 
-def account_view(request):
+def profile_view(request):
     return render(request, "baby_tracker_app/account.html")
 
 
@@ -23,13 +23,25 @@ def baby_create_view(request):
             instance.parent = request.user
             instance.save()
             return redirect("/overview/")
-
-        print(form.is_valid())
-        print(form.cleaned_data)
     else:
         form = BabyTrackerForm()  # handles GET request
 
-    # template_name = 'nazev_app/nazev_modulu_form.html
+    return render(request, "baby_tracker_app/baby_tracker_form.html", {"form": form})
+
+
+@login_required
+def baby_update_view(request, baby_id):
+    baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
+
+    if request.method == "POST":
+        form = BabyTrackerForm(request.POST, request.FILES, instance=baby)
+
+        if form.is_valid():
+            instance = form.save()
+            return redirect("/overview/")  # redirect jestli to proběhlo v pořádku
+    else:
+        form = BabyTrackerForm(instance=baby)  # handles GET request
+
     return render(request, "baby_tracker_app/baby_tracker_form.html", {"form": form})
 
 
@@ -130,10 +142,3 @@ def growth_view(request, baby_id):
         "baby_tracker_app/growth.html",
         {"baby": baby, "form": form, "growths": growths},
     )
-
-
-"""
-def baby_feeding_view(request, baby_id):
-    print(baby_id)
-    return render(request, "baby_tracker_app/baby_feeding.html")
-"""

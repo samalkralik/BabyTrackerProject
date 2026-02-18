@@ -3,7 +3,17 @@
 {% block base_content %}
 <div class="container mt-4">
     <div class="text-center mb-5">
-        <h1 class="display-3">{{ baby.name }}</h1>
+        <a href="/overview/{{ baby.pk }}/update/" class="text-decoration-none text-dark">
+            <h1 class="display-3">{{ baby.name }}</h1>
+        </a>
+
+        {% if baby.birth_date %}
+        <p>Age: {{ baby.age_display }}</p>
+        {% endif %}
+
+        {% if baby.gender %}
+        <p>Gender: {{ baby.gender }}</p>
+        {% endif %}
     </div>
 
     <div class="text-center mb-5">

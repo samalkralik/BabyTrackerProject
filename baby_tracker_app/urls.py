@@ -9,12 +9,12 @@ def test_view(request, **kwargs):
 
 urlpatterns = [
     path("", views.index_view),
-    path("login/", test_view),
-    path("accounts/profile/", views.account_view),
     path("overview/", views.overview_view),
-    path("overview/add/", views.baby_create_view),  # add_baby_view
+    path("overview/add/", views.baby_create_view),
     path("overview/<int:baby_id>/", views.baby_detail_view),
+    path("overview/<int:baby_id>/update/", views.baby_update_view),
     path("overview/<int:baby_id>/feeding/", views.feeding_view),
     path("overview/<int:baby_id>/sleep/", views.sleep_view),
     path("overview/<int:baby_id>/growth/", views.growth_view),
+    path("accounts/profile/", views.profile_view),
 ]

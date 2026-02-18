@@ -26,11 +26,12 @@
                 {% endif %}
 
                 <div class="card-body text-center bg-white">
-                    <h5 class="card-title fw-bold text-dark mb-1">{{ baby.name }}</h5>
-                    <p class="text-muted small mb-3">ID: {{ baby.baby_id }}</p>
+                    <h5 class="card-title fw-bold text-dark mb-3">{{ baby.name }}</h5>
 
-                    <a href="/overview/{{ baby.pk }}/" class="btn btn-outline-danger btn-sm rounded-pill px-3">View
+                    <a href="/overview/{{ baby.pk }}/" class="btn btn-outline-primary btn-sm rounded-pill px-3">View
                         Profile</a>
+                    <a href="/overview/{{ baby.pk }}/update/"
+                        class="btn btn-outline-secondary btn-sm rounded-pill px-3">Edit Profile</a>
                 </div>
             </div>
         </div>
