@@ -12,7 +12,7 @@
         {% endif %}
 
         {% if baby.gender %}
-        <p>Gender: {{ baby.gender }}</p>
+        <p>Gender: {{ baby.get_gender_display }}</p>
         {% endif %}
     </div>
 

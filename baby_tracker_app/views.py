@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from baby_tracker_app.models import Baby, Feeding, Sleep, Growth
@@ -107,16 +108,24 @@ def sleep_view(request, baby_id):
             instance = form.save(commit=False)
             instance.baby = baby
             instance.save()
-            # return redirect("/overview/{baby.id}/sleep/", baby_id=baby.id)
             return redirect(request.path)
     else:
         form = SleepForm()
 
-    sleeps = Sleep.objects.filter(baby=baby).order_by("-start_time")[:10]
+    sleep_list = Sleep.objects.filter(baby=baby).order_by("-start_time")
+
+    paginator = Paginator(sleep_list, 10)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
     return render(
         request,
         "baby_tracker_app/sleep.html",
-        {"baby": baby, "form": form, "sleeps": sleeps},
+        {
+            "baby": baby,
+            "form": form,
+            "page": page,
+        },
     )
 
 

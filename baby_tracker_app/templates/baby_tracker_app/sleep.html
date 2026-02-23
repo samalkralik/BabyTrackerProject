@@ -13,29 +13,63 @@
                     <form method="POST">
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <button type="submit" class="btn btn-success w-100">Save Sleep Session</button>
+                        <button type="submit" class="btn btn-success w-100">Save</button>
                     </form>
                 </div>
             </div>
         </div>
 
         <div class="col-md-7">
-            <h3 class="fw-bold">Recent Naps</h3>
-            <div class="list-group">
-                {% for s in sleeps %}
-                <div class="list-group-item">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="mb-1">Duration: {{ s.sleep_duration }}</h5>
-                        <small class="text-muted">{{ s.start_time|date:"D, d.m." }}</small>
+            <div class="card shadow-sm border-success">
+                <div class="card-body">
+                    <h3 class="fw-bold text-success mb-3">🛌 Sleep Duration</h3>
+
+                    <div class="list-group list-group-flush">
+                        {% for s in page %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-1">⭐ {{ s.sleep_duration }}</h5>
+                                <small class="text-muted">{{ s.start_time|date:"D, d.m." }}</small>
+                            </div>
+                            <p class="mb-1 text-secondary">
+                                From: {{ s.start_time|date:"H:i" }} - To: {{ s.end_time|date:"H:i" }}
+                            </p>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">No sleep records found yet.</p>
+                        {% endfor %}
                     </div>
-                    <p class="mb-1 text-secondary">
-                        From: {{ s.start_time|date:"H:i" }} — To: {{ s.end_time|date:"H:i" }}
-                    </p>
+                    {% if page.has_other_pages %}
+                    <div
+                        class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center pb-3">
+
+                        {% if page.has_previous %}
+                        <a href="{{ request.path }}?page={{ page.previous_page_number }}"
+                            class="btn btn-outline-success">
+                            &laquo;
+                        </a>
+                        {% else %}
+                        <button class="btn btn-outline-secondary disabled">&laquo;</button>
+                        {% endif %}
+
+                        <span class="text-muted">
+                            Page {{ page.number }} of {{ page.paginator.num_pages }}
+                        </span>
+
+                        {% if page.has_next %}
+                        <a href="{{ request.path }}?page={{ page.next_page_number }}" class="btn btn-outline-success">
+                            &raquo;
+                        </a>
+                        {% else %}
+                        <button class="btn btn-outline-secondary disabled">&raquo;</button>
+                        {% endif %}
+
+                    </div>
+                    {% endif %}
+
                 </div>
-                {% empty %}
-                <p class="text-muted">No sleep records found yet.</p>
-                {% endfor %}
             </div>
+
         </div>
     </div>
 </div>
