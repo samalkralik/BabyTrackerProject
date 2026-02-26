@@ -26,30 +26,60 @@
         </div>
 
         <div class="col-md-12">
-            <h3 class="fw-bold">Growth History</h3>
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered shadow-sm bg-white">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Date</th>
-                            <th>Weight (kg)</th>
-                            <th>Height (cm)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for g in growths %}
-                        <tr>
-                            <td>{{ g.date|date:"d.m.Y" }}</td>
-                            <td>{{ g.weight }} kg</td>
-                            <td>{{ g.height }} cm</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="3" class="text-center text-muted">No measurements recorded yet.</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="card shadow-sm border-info">
+                <div class="card-body pb-0">
+                    <h3 class="fw-bold text-info mb-3">📋 Growth History</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered shadow-sm bg-white">
+                            <thead class="table-secondary">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Weight (kg)</th>
+                                    <th>Height (cm)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for g in page %}
+                                <tr>
+                                    <td>{{ g.date|date:"d.m.Y" }}</td>
+                                    <td>{{ g.weight }} kg</td>
+                                    <td>{{ g.height }} cm</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No measurements recorded yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if page.has_other_pages %}
+                        <div class="d-flex justify-content-between align-items-center mt-3 pb-3">
+
+                            {% if page.has_previous %}
+                            <a href="{{ request.path }}?page={{ page.previous_page_number }}"
+                                class="btn btn-outline-info">
+                                &laquo;
+                            </a>
+                            {% else %}
+                            <button class="btn btn-outline-secondary disabled">&laquo;</button>
+                            {% endif %}
+
+                            <span class="text-muted small">
+                                Page {{ page.number }} of {{ page.paginator.num_pages }}
+                            </span>
+
+                            {% if page.has_next %}
+                            <a href="{{ request.path }}?page={{ page.next_page_number }}" class="btn btn-outline-info">
+                                &raquo;
+                            </a>
+                            {% else %}
+                            <button class="btn btn-outline-secondary disabled">&raquo;</button>
+                            {% endif %}
+
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

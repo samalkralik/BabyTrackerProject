@@ -19,7 +19,7 @@ class GrowthForm(forms.ModelForm):
 class FeedingForm(forms.ModelForm):
     class Meta:
         model = Feeding
-        fields = ["time", "feed_type", "amount", "note"]
+        fields = ["time", "feed_type", "amount"]
         widgets = {"time": forms.DateTimeInput(attrs={"type": "datetime-local"})}
 
 

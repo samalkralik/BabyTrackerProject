@@ -7,31 +7,63 @@
 
     <div class="row">
         <div class="col-md-5">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-warning">
                 <div class="card-body">
-                    <h3 class="card-title">🍼 Log Feeding</h3>
+                    <h3 class="card-title text-warning mb-3">🍼 Log Feeding</h3>
                     <form method="POST">
                         {% csrf_token %}
                         {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary w-100">Save Feeding</button>
+                        <button type="submit" class="btn btn-primary w-100">Save</button>
                     </form>
                 </div>
             </div>
         </div>
 
         <div class="col-md-7">
-            <h3>Recent History</h3>
-            <div class="list-group">
-                {% for f in feedings %}
-                <div class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>{{ f.amount }} ml</strong> of {{ f.get_feed_type_display }}
+            <div class="card shadow-sm border-warning">
+                <div class="card-body">
+                    <h3 class="fw-bold text-warning mb-3">📋 Feeding History</h3>
+
+                    <div class="list-group list-group-flush">
+                        {% for f in page %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{{ f.amount }} ml</strong> of {{ f.get_feed_type_display }}
+                            </div>
+                            <span class="text-muted">{{ f.time|date:"d.m. H:i" }}</span>
+                        </div>
+                        {% empty %}
+                        <p class="text-muted">No feedings logged yet.</p>
+                        {% endfor %}
                     </div>
-                    <span class="text-muted">{{ f.time|date:"d.m. H:i" }}</span>
                 </div>
-                {% empty %}
-                <p class="text-muted">No feedings logged yet.</p>
-                {% endfor %}
+
+                {% if page.has_other_pages %}
+                <div
+                    class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center pb-3">
+
+                    {% if page.has_previous %}
+                    <a href="{{ request.path }}?page={{ page.previous_page_number }}" class="btn btn-outline-warning">
+                        &laquo;
+                    </a>
+                    {% else %}
+                    <button class="btn btn-outline-secondary disabled">&laquo;</button>
+                    {% endif %}
+
+                    <span class="text-muted small">
+                        Page {{ page.number }} of {{ page.paginator.num_pages }}
+                    </span>
+
+                    {% if page.has_next %}
+                    <a href="{{ request.path }}?page={{ page.next_page_number }}" class="btn btn-outline-warning">
+                        &raquo;
+                    </a>
+                    {% else %}
+                    <button class="btn btn-outline-secondary disabled">&raquo;</button>
+                    {% endif %}
+
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

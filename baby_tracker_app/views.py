@@ -90,11 +90,16 @@ def feeding_view(request, baby_id):
     else:
         form = FeedingForm()
 
-    feedings = Feeding.objects.filter(baby=baby).order_by("-time")[:10]
+    feeding_tracks = Feeding.objects.filter(baby=baby).order_by("-time")
+
+    paginator = Paginator(feeding_tracks, 10)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
+
     return render(
         request,
         "baby_tracker_app/feeding.html",
-        {"baby": baby, "form": form, "feedings": feedings},
+        {"baby": baby, "form": form, "page": page},
     )
 
 
@@ -112,9 +117,9 @@ def sleep_view(request, baby_id):
     else:
         form = SleepForm()
 
-    sleep_list = Sleep.objects.filter(baby=baby).order_by("-start_time")
+    sleep_tracks = Sleep.objects.filter(baby=baby).order_by("-start_time")
 
-    paginator = Paginator(sleep_list, 10)
+    paginator = Paginator(sleep_tracks, 10)
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
 
@@ -144,10 +149,14 @@ def growth_view(request, baby_id):
     else:
         form = GrowthForm()
 
-    growths = Growth.objects.filter(baby=baby).order_by("-date")
+    growth_tracks = Growth.objects.filter(baby=baby).order_by("-date")
+
+    paginator = Paginator(growth_tracks, 10)
+    page_number = request.GET.get("page")
+    page = paginator.get_page(page_number)
 
     return render(
         request,
         "baby_tracker_app/growth.html",
-        {"baby": baby, "form": form, "growths": growths},
+        {"baby": baby, "form": form, "page": page},
     )
