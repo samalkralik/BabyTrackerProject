@@ -84,9 +84,15 @@ def feeding_view(request, baby_id):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.baby = baby
+
+            # if JS failed to set time, set it to now
+            if not instance.time:
+                from django.utils import timezone
+
+                instance.time = timezone.now()
+
             instance.save()
             return redirect(request.path)
-            # return redirect("/overview/{baby.id}/feeding/", baby_id=baby.id)
     else:
         form = FeedingForm()
 

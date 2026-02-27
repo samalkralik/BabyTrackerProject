@@ -9,11 +9,39 @@
         <div class="col-md-5">
             <div class="card shadow-sm border-warning">
                 <div class="card-body">
-                    <h3 class="card-title text-warning mb-3">🍼 Log Feeding</h3>
-                    <form method="POST">
+                    <h3 class="card-title text-warning mb-4">🍼 Log Feeding</h3>
+                    <form method="POST" id="feeding-form">
                         {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary w-100">Save</button>
+
+                        <div class="mb-4">
+                            {{ form.feed_type }}
+                        </div>
+
+                        <div id="timer-section" class="text-center my-4 p-3 border rounded bg-light"
+                            style="display:none;">
+                            <h2 id="display" class="display-4 font-monospace">00:00</h2>
+                            <div class="d-flex gap-2">
+                                <button type="button" id="startStopBtn"
+                                    class="btn btn-success btn-lg w-100">Start</button>
+                                <button type="button" id="resetBtn" class="btn btn-outline-secondary">Reset</button>
+                            </div>
+                        </div>
+
+                        <div id="bottle-fields" class="p-3 border rounded mb-3 bg-warning-subtle" style="display:none;">
+                            {{ form.milk_type|as_crispy_field }}
+                            {{ form.amount|as_crispy_field }}
+                        </div>
+
+                        <div id="solid-fields" style="display:none;">
+                            {{ form.note|as_crispy_field }}
+                        </div>
+
+                        <div id="summary-fields" class="row g-2" style="display:none;">
+                            <div class="col-6">{{ form.time|as_crispy_field }}</div>
+                            <div class="col-6">{{ form.duration|as_crispy_field }}</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mt-4 py-2 fw-bold">Save</button>
                     </form>
                 </div>
             </div>
@@ -22,50 +50,144 @@
         <div class="col-md-7">
             <div class="card shadow-sm border-warning">
                 <div class="card-body">
-                    <h3 class="fw-bold text-warning mb-3">📋 Feeding History</h3>
+                    <h3 class="fw-bold text-warning mb-2">📋 Latest Feeding</h3>
+
+                    {% regroup page by time.date as daily_feedings %}
+
+                    {% for day in daily_feedings %}
+                    <div class="mt-3 mb-2 bg-light p-2 rounded border-start border-warning border-4">
+                        <h6 class="mb-0 fw-bold">{{ day.grouper|date:"d F" }}</h6>
+                    </div>
 
                     <div class="list-group list-group-flush">
-                        {% for f in page %}
-                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                        {% for f in day.list %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                             <div>
-                                <strong>{{ f.amount }} ml</strong> of {{ f.get_feed_type_display }}
+                                <strong>{{ f.time|date:"H:i" }}</strong>
+                                <span class="ms-1">— {{ f.get_feed_type_display }}</span>
+                                <div class="small text-muted">
+                                    {% if f.feed_type == 3 %} {{ f.amount }}ml {{ f.get_milk_type_display }}
+                                    {% if f.duration %}({{ f.duration }} min){% endif %}
+                                    {% elif f.feed_type == 4 %} {{ f.note|truncatechars:50 }}
+                                    {% else %} {{ f.duration_minutes }} min
+                                    {% endif %}
+                                </div>
                             </div>
-                            <span class="text-muted">{{ f.time|date:"d.m. H:i" }}</span>
                         </div>
-                        {% empty %}
-                        <p class="text-muted">No feedings logged yet.</p>
                         {% endfor %}
                     </div>
+                    {% empty %}
+                    <p class="text-muted">No feedings logged yet.</p>
+                    {% endfor %}
                 </div>
 
-                {% if page.has_other_pages %}
-                <div
-                    class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center pb-3">
-
-                    {% if page.has_previous %}
-                    <a href="{{ request.path }}?page={{ page.previous_page_number }}" class="btn btn-outline-warning">
-                        &laquo;
-                    </a>
-                    {% else %}
-                    <button class="btn btn-outline-secondary disabled">&laquo;</button>
-                    {% endif %}
-
-                    <span class="text-muted small">
-                        Page {{ page.number }} of {{ page.paginator.num_pages }}
-                    </span>
-
-                    {% if page.has_next %}
-                    <a href="{{ request.path }}?page={{ page.next_page_number }}" class="btn btn-outline-warning">
-                        &raquo;
-                    </a>
-                    {% else %}
-                    <button class="btn btn-outline-secondary disabled">&raquo;</button>
-                    {% endif %}
-
+                <div class="list-group list-group-flush">
+                    {% for f in page %}
+                    <div class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ f.amount }} ml</strong> of {{ f.get_feed_type_display }}
+                        </div>
+                        <span class="text-muted">{{ f.time|date:"d.m. H:i" }}</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No feedings logged yet.</p>
+                    {% endfor %}
                 </div>
-                {% endif %}
             </div>
+
+            {% if page.has_other_pages %}
+            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center pb-3">
+
+                {% if page.has_previous %}
+                <a href="{{ request.path }}?page={{ page.previous_page_number }}" class="btn btn-outline-warning">
+                    &laquo;
+                </a>
+                {% else %}
+                <button class="btn btn-outline-secondary disabled">&laquo;</button>
+                {% endif %}
+
+                <span class="text-muted small">
+                    Page {{ page.number }} of {{ page.paginator.num_pages }}
+                </span>
+
+                {% if page.has_next %}
+                <a href="{{ request.path }}?page={{ page.next_page_number }}" class="btn btn-outline-warning">
+                    &raquo;
+                </a>
+                {% else %}
+                <button class="btn btn-outline-secondary disabled">&raquo;</button>
+                {% endif %}
+
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+    let startTime, timerInterval, running = false;
+    const typeSelect = document.querySelector('[name="feed_type"]');
+    const startStopBtn = document.getElementById('startStopBtn');
+    const display = document.getElementById('display');
+
+    const timerSection = document.getElementById('timer-section');
+    const bottleFields = document.getElementById('bottle-fields');
+    const solidFields = document.getElementById('solid-fields');
+    const summaryFields = document.getElementById('summary-fields');
+
+    const timeInput = document.getElementById('id_time');
+    const durationInput = document.getElementById('id_duration_minutes');
+
+    function styleDropdown() {
+        if (typeSelect.value !== "") {
+            typeSelect.classList.add('is-selected');
+        } else {
+            typeSelect.classList.remove('is-selected');
+        }
+    }
+
+    typeSelect.addEventListener('change', function () {
+        styleDropdown();
+        const val = this.value; // 1:L, 2:R, 3:Bottle, 4:Solid
+        timerSection.style.display = (val >= 1 && val <= 3) ? "block" : "none";
+        bottleFields.style.display = (val == "3") ? "block" : "none";
+        solidFields.style.display = (val == "4") ? "block" : "none";
+        summaryFields.style.display = "flex"; // Always show so parents can see/edit
+    });
+
+    startStopBtn.addEventListener('click', function () {
+        if (!running) {
+            startTime = new Date();
+            const tzOffset = startTime.getTimezoneOffset() * 60000;
+            timeInput.value = new Date(startTime - tzOffset).toISOString().slice(0, 16);
+            timerInterval = setInterval(updateDisplay, 1000);
+            this.textContent = "Stop";
+            this.className = "btn btn-danger btn-lg w-100";
+            running = true;
+        } else {
+            clearInterval(timerInterval);
+            const diffMins = Math.round((new Date() - startTime) / 60000);
+            durationInput.value = diffMins || 1;
+            this.textContent = "Restart";
+            this.className = "btn btn-warning btn-lg w-100";
+            running = false;
+        }
+    });
+
+    function updateDisplay() {
+        const diff = Math.floor((new Date() - startTime) / 1000);
+        const m = Math.floor(diff / 60).toString().padStart(2, '0');
+        const s = (diff % 60).toString().padStart(2, '0');
+        display.textContent = `${m}:${s}`;
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+        clearInterval(timerInterval);
+        running = false;
+        display.textContent = "00:00";
+        startStopBtn.textContent = "Start";
+        startStopBtn.className = "btn btn-success btn-lg w-100";
+    });
+</script>
+
 {% endblock %}

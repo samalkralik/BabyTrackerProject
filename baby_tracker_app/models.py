@@ -113,22 +113,27 @@ class Sleep(models.Model):
 
 
 class FeedingType(models.IntegerChoices):
-    BREAST = 1, "Breast"
-    BOTTLE = 2, "Bottle"
-    SOLID = 3, "Solid"
+    LEFT_BREAST = 1, "Left Breast"
+    RIGHT_BREAST = 2, "Right Breast"
+    BOTTLE = 3, "Bottle"
+    SOLID = 4, "Solid"
+
+
+class MilkType(models.TextChoices):
+    FORMULA = "formula", "Formula"
+    BREAST_MILK = "breast_milk", "Breast Milk"
 
 
 class Feeding(models.Model):
     baby = models.ForeignKey(Baby, on_delete=models.CASCADE)
     time = models.DateTimeField()
-
-    feed_type = models.PositiveSmallIntegerField(
-        choices=FeedingType.choices,
-        default=FeedingType.BREAST,
+    feed_type = models.PositiveSmallIntegerField(choices=FeedingType.choices)
+    milk_type = models.CharField(
+        max_length=20, choices=MilkType.choices, blank=True, null=True
     )
-
-    amount = models.FloatField(help_text="Amount in ml or grams")
-    note = models.TextField(blank=True)
+    duration = models.PositiveIntegerField(blank=True, null=True)
+    amount = models.FloatField(help_text="Amount in ml or grams", blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
 
     @property
     def formatted_time(self):
