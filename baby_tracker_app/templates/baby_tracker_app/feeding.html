@@ -64,62 +64,63 @@
                         <div class="list-group-item d-flex justify-content-between align-items-center bg-transparent">
                             <div>
                                 <strong>{{ f.time|date:"H:i" }}</strong>
-                                <span class="ms-1">— {{ f.get_feed_type_display }}</span>
-                                <div class="small text-muted">
-                                    {% if f.feed_type == 3 %} {{ f.amount }}ml {{ f.get_milk_type_display }}
-                                    {% if f.duration %}({{ f.duration }} min){% endif %}
-                                    {% elif f.feed_type == 4 %} {{ f.note|truncatechars:50 }}
-                                    {% else %} {{ f.duration_minutes }} min
+                                <span class="ms-1">- {{ f.get_feed_type_display }}</span>
+                                <span class="small text-muted">
+                                    {% if f.feed_type == 3 %}
+                                    {# BOTTLE LOGIC #}
+                                    {% if f.amount %}{{ f.amount }} ml{% endif %}
+                                    {% if f.milk_type %}{{ f.get_milk_type_display }}{% endif %}
+
+                                    {% elif f.feed_type == 4 %}
+                                    {# SOLID LOGIC #}
+                                    {% if f.note %}{{ f.note|truncatechars:50 }}{% endif %}
+
+                                    {% else %}
+                                    {# BREAST LOGIC (Left/Right) #}
+                                    {% if f.duration %}⏱️ {{ f.duration }}{% endif %}
                                     {% endif %}
-                                </div>
+                                </span>
                             </div>
+                            <a href="/overview/{{ baby.id }}/feeding/update/{{ f.id }}/"
+                                class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;">
+                                Edit
+                            </a>
                         </div>
                         {% endfor %}
                     </div>
                     {% empty %}
-                    <p class="text-muted">No feedings logged yet.</p>
+                    <p class="text-muted mt-4 mb-7">No feedings logged yet.</p>
                     {% endfor %}
                 </div>
 
-                <div class="list-group list-group-flush">
-                    {% for f in page %}
-                    <div class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>{{ f.amount }} ml</strong> of {{ f.get_feed_type_display }}
-                        </div>
-                        <span class="text-muted">{{ f.time|date:"d.m. H:i" }}</span>
-                    </div>
-                    {% empty %}
-                    <p class="text-muted">No feedings logged yet.</p>
-                    {% endfor %}
+
+                {% if page.has_other_pages %}
+                <div
+                    class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center pb-3">
+
+                    {% if page.has_previous %}
+                    <a href="{{ request.path }}?page={{ page.previous_page_number }}" class="btn btn-outline-warning">
+                        &laquo;
+                    </a>
+                    {% else %}
+                    <button class="btn btn-outline-secondary disabled">&laquo;</button>
+                    {% endif %}
+
+                    <span class="text-muted small">
+                        Page {{ page.number }} of {{ page.paginator.num_pages }}
+                    </span>
+
+                    {% if page.has_next %}
+                    <a href="{{ request.path }}?page={{ page.next_page_number }}" class="btn btn-outline-warning">
+                        &raquo;
+                    </a>
+                    {% else %}
+                    <button class="btn btn-outline-secondary disabled">&raquo;</button>
+                    {% endif %}
+
                 </div>
-            </div>
-
-            {% if page.has_other_pages %}
-            <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center pb-3">
-
-                {% if page.has_previous %}
-                <a href="{{ request.path }}?page={{ page.previous_page_number }}" class="btn btn-outline-warning">
-                    &laquo;
-                </a>
-                {% else %}
-                <button class="btn btn-outline-secondary disabled">&laquo;</button>
                 {% endif %}
-
-                <span class="text-muted small">
-                    Page {{ page.number }} of {{ page.paginator.num_pages }}
-                </span>
-
-                {% if page.has_next %}
-                <a href="{{ request.path }}?page={{ page.next_page_number }}" class="btn btn-outline-warning">
-                    &raquo;
-                </a>
-                {% else %}
-                <button class="btn btn-outline-secondary disabled">&raquo;</button>
-                {% endif %}
-
             </div>
-            {% endif %}
         </div>
     </div>
 </div>
@@ -136,7 +137,7 @@
     const summaryFields = document.getElementById('summary-fields');
 
     const timeInput = document.getElementById('id_time');
-    const durationInput = document.getElementById('id_duration_minutes');
+    const durationInput = document.getElementById('id_duration');
 
     function styleDropdown() {
         if (typeSelect.value !== "") {
@@ -149,10 +150,20 @@
     typeSelect.addEventListener('change', function () {
         styleDropdown();
         const val = this.value; // 1:L, 2:R, 3:Bottle, 4:Solid
-        timerSection.style.display = (val >= 1 && val <= 3) ? "block" : "none";
+
+        const isBreast = (val == "1" || val == "2");
+        timerSection.style.display = isBreast ? "block" : "none";
+
         bottleFields.style.display = (val == "3") ? "block" : "none";
         solidFields.style.display = (val == "4") ? "block" : "none";
-        summaryFields.style.display = "flex"; // Always show so parents can see/edit
+        summaryFields.style.display = "flex";
+
+        const durationCol = durationInput.closest('.col-6');
+        if (durationCol) {
+            durationCol.style.display = isBreast ? "block" : "none";
+
+            timeInput.closest('.col-6').className = isBreast ? "col-6" : "col-12";
+        }
     });
 
     startStopBtn.addEventListener('click', function () {
@@ -166,8 +177,11 @@
             running = true;
         } else {
             clearInterval(timerInterval);
-            const diffMins = Math.round((new Date() - startTime) / 60000);
-            durationInput.value = diffMins || 1;
+            const val = typeSelect.value;
+            if (val == "1" || val == "2") {
+                durationInput.value = display.textContent;
+            }
+
             this.textContent = "Restart";
             this.className = "btn btn-warning btn-lg w-100";
             running = false;

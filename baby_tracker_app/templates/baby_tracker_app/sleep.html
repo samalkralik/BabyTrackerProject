@@ -34,6 +34,10 @@
                             <p class="mb-1 text-secondary">
                                 From: {{ s.start_time|date:"H:i" }} - To: {{ s.end_time|date:"H:i" }}
                             </p>
+                            <a href="/overview/{{ baby.id }}/sleep/update/{{ s.id }}/"
+                                class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;">
+                                Edit
+                            </a>
                         </div>
                         {% empty %}
                         <p class="text-muted">No sleep records found yet.</p>

@@ -1,0 +1,32 @@
+{% extends 'baby_tracker_app/_base.html' %}
+{% load crispy_forms_tags %}
+
+{% block base_content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-primary">
+                <div class="card-body">
+                    <h3 class="text-primary mb-4">🌙 Edit Sleep Record</h3>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary fw-bold">Save Changes</button>
+
+                            <button type="submit" name="delete" class="btn btn-outline-danger btn-sm mt-2"
+                                onclick="return confirm('Delete this sleep record permanently?')">
+                                Delete Record
+                            </button>
+
+                            <a href="/overview/{{ baby.id }}/sleep/" class="btn btn-link text-muted">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

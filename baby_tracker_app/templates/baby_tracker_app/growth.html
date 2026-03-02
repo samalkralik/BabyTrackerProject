@@ -44,6 +44,11 @@
                                     <td>{{ g.date|date:"d.m.Y" }}</td>
                                     <td>{{ g.weight }} kg</td>
                                     <td>{{ g.height }} cm</td>
+                                    <td class="text-center"> <a href="/overview/{{ baby.id }}/growth/update/{{ g.id }}/"
+                                            class="btn btn-sm btn-outline-secondary py-0">
+                                            Edit
+                                        </a>
+                                    </td>
                                 </tr>
                                 {% empty %}
                                 <tr>
@@ -51,6 +56,7 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
+
                         </table>
 
                         {% if page.has_other_pages %}

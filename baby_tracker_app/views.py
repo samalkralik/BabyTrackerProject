@@ -23,7 +23,7 @@ def baby_create_view(request):
             instance = form.save(commit=False)
             instance.parent = request.user
             instance.save()
-            return redirect("/overview/")
+            return redirect(f"/overview/")
     else:
         form = BabyTrackerForm()  # handles GET request
 
@@ -39,7 +39,9 @@ def baby_update_view(request, baby_id):
 
         if form.is_valid():
             instance = form.save()
-            return redirect("/overview/")  # redirect jestli to proběhlo v pořádku
+            return redirect(
+                f"/overview/{baby_id}/"
+            )  # redirect jestli to proběhlo v pořádku
     else:
         form = BabyTrackerForm(instance=baby)  # handles GET request
 
@@ -110,6 +112,31 @@ def feeding_view(request, baby_id):
 
 
 @login_required
+def feeding_update_view(request, baby_id, feeding_id):
+    baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
+    feeding = get_object_or_404(Feeding, id=feeding_id, baby=baby)
+
+    if request.method == "POST":
+        if "delete" in request.POST:
+            feeding.delete()
+            # Redirect to the main feeding list for this baby
+            return redirect(f"/overview/{baby_id}/feeding/")
+
+        form = FeedingForm(request.POST, instance=feeding)
+        if form.is_valid():
+            form.save()
+            return redirect(f"/overview/{baby_id}/feeding/")
+    else:
+        form = FeedingForm(instance=feeding)
+
+    return render(
+        request,
+        "baby_tracker_app/feeding_update.html",
+        {"baby": baby, "form": form, "feeding": feeding},
+    )
+
+
+@login_required
 def sleep_view(request, baby_id):
     baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
 
@@ -141,6 +168,30 @@ def sleep_view(request, baby_id):
 
 
 @login_required
+def sleep_update_view(request, baby_id, sleep_id):
+    baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
+    sleep = get_object_or_404(Sleep, id=sleep_id, baby=baby)
+
+    if request.method == "POST":
+        if "delete" in request.POST:
+            sleep.delete()
+            return redirect(f"/overview/{baby_id}/sleep/")
+
+        form = SleepForm(request.POST, instance=sleep)
+        if form.is_valid():
+            form.save()
+            return redirect(f"/overview/{baby_id}/sleep/")
+    else:
+        form = SleepForm(instance=sleep)
+
+    return render(
+        request,
+        "baby_tracker_app/sleep_update.html",
+        {"form": form, "baby": baby, "sleep": sleep},
+    )
+
+
+@login_required
 def growth_view(request, baby_id):
     baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
 
@@ -165,4 +216,28 @@ def growth_view(request, baby_id):
         request,
         "baby_tracker_app/growth.html",
         {"baby": baby, "form": form, "page": page},
+    )
+
+
+@login_required
+def growth_update_view(request, baby_id, growth_id):
+    baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
+    growth = get_object_or_404(Growth, id=growth_id, baby=baby)
+
+    if request.method == "POST":
+        if "delete" in request.POST:
+            growth.delete()
+            return redirect(f"/overview/{baby_id}/growth/")
+
+        form = GrowthForm(request.POST, instance=growth)
+        if form.is_valid():
+            form.save()
+            return redirect(f"/overview/{baby_id}/growth/")
+    else:
+        form = GrowthForm(instance=growth)
+
+    return render(
+        request,
+        "baby_tracker_app/growth_update.html",
+        {"form": form, "baby": baby, "growth": growth},
     )
