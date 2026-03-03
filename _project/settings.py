@@ -136,3 +136,13 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"  # or your SMTP server address
+EMAIL_PORT = 587  # Standard port for TLS
+EMAIL_USE_TLS = True  # Use secure connection
+EMAIL_USE_SSL = False  # Usually one or the other, TLS is more common for 587
+EMAIL_HOST_USER = "samalkralik@gmail.com"
+EMAIL_HOST_PASSWORD = "zwhqqrwrvtshasjf"
+
+DEFAULT_FROM_EMAIL = "Baby Tracker <your-email@gmail.com>"

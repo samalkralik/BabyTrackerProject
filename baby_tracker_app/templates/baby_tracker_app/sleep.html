@@ -26,18 +26,24 @@
 
                     <div class="list-group list-group-flush">
                         {% for s in page %}
-                        <div class="list-group-item">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="mb-1">⭐ {{ s.sleep_duration }}</h5>
-                                <small class="text-muted">{{ s.start_time|date:"D, d.m." }}</small>
+                        <div class="list-group-item px-0">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="mb-1 fw-bold">⭐ {{ s.sleep_duration }}</h5>
+                                    <p class="mb-0 text-secondary small">
+                                        {{ s.start_time|date:"H:i" }} — {{ s.end_time|date:"H:i" }}
+                                    </p>
+                                </div>
+
+                                <div class="text-end">
+                                    <div class="small text-muted mb-1">{{ s.start_time|date:"D, d.m." }}</div>
+                                    <a href="/overview/{{ baby.id }}/sleep/update/{{ s.id }}/"
+                                        class="btn btn-sm btn-outline-secondary py-0 px-2"
+                                        style="font-size: 0.70rem; border-radius: 10px;">
+                                        Edit
+                                    </a>
+                                </div>
                             </div>
-                            <p class="mb-1 text-secondary">
-                                From: {{ s.start_time|date:"H:i" }} - To: {{ s.end_time|date:"H:i" }}
-                            </p>
-                            <a href="/overview/{{ baby.id }}/sleep/update/{{ s.id }}/"
-                                class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size: 0.75rem;">
-                                Edit
-                            </a>
                         </div>
                         {% empty %}
                         <p class="text-muted">No sleep records found yet.</p>

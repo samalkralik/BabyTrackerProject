@@ -4,14 +4,34 @@
 {% block base_content %}
 
 <div class="mt-4" style="max-width: 480px; margin: 0 auto;">
-    <h1 class="fw-bold mb-4">Create new baby profile</h1>
+    <h1 class="fw-bold mb-4">
+        {% if baby %}{{ baby.name }}'s Profile{% else %}Welcome a new baby!{% endif %}
+    </h1>
 
     <form action="{{ request.path }}" method="POST" id="form1" enctype="multipart/form-data">
-        {% csrf_token %} <!-- for safety from django-->
-
+        {% csrf_token %}
         {{ form|crispy }}
+        <div class="mt-4 pt-4 border-top">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+
+                <button type="submit" class="btn btn-outline-primary px-4 fw-bold" form="form1">
+                    Save Changes
+                </button>
+
+                <a href="/overview/" class="btn btn-outline-secondary px-4">
+                    Cancel
+                </a>
+
+                {% if baby %}
+                <button type="submit" name="delete" class="btn btn-outline-danger px-4" form="form1"
+                    onclick="return confirm('Permanently delete {{ baby.name }}\'s profile?')">
+                    Delete Profile
+                </button>
+                {% endif %}
+
+            </div>
+        </div>
     </form>
-    <button type="submit" class="btn btn-primary" form="form1">Save</button>
 </div>
 
 {% endblock %}

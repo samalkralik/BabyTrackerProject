@@ -14,14 +14,15 @@
                         {{ form|crispy }}
 
                         <div class="d-grid gap-2 mt-4">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <button type="submit" class="btn btn-outline-primary">Save Changes</button>
 
-                            <button type="submit" name="delete" class="btn btn-outline-danger btn-sm mt-2"
+                            <button type="submit" name="delete" class="btn btn-outline-danger"
                                 onclick="return confirm('Delete this record permanently?')">
-                                Delete Record
+                                Delete
                             </button>
 
-                            <a href="/overview/{{ baby.id }}/feeding/" class="btn btn-link text-muted">Cancel</a>
+                            <a href="/overview/{{ baby.id }}/feeding/"
+                                class="btn btn-outline-secondary text-muted">Back</a>
                         </div>
                     </form>
                 </div>

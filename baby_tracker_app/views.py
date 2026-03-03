@@ -35,17 +35,21 @@ def baby_update_view(request, baby_id):
     baby = get_object_or_404(Baby, id=baby_id, parent=request.user)
 
     if request.method == "POST":
+        if "delete" in request.POST:
+            baby.delete()
+            return redirect("/overview/")
+
         form = BabyTrackerForm(request.POST, request.FILES, instance=baby)
 
         if form.is_valid():
             instance = form.save()
-            return redirect(
-                f"/overview/{baby_id}/"
-            )  # redirect jestli to proběhlo v pořádku
+            return redirect(f"/overview/{baby_id}/")
     else:
-        form = BabyTrackerForm(instance=baby)  # handles GET request
+        form = BabyTrackerForm(instance=baby)
 
-    return render(request, "baby_tracker_app/baby_tracker_form.html", {"form": form})
+    return render(
+        request, "baby_tracker_app/baby_tracker_form.html", {"form": form, "baby": baby}
+    )
 
 
 @login_required
