@@ -1,0 +1,29 @@
+{% for baby in babies %}
+<div class="col d-flex justify-content-center">
+    <div class="card shadow-sm border-0 h-100"
+        style="width: 100%; max-width: 300px; border-radius: 15px; overflow: hidden;">
+
+        {% if baby.image %}
+        <img src="{{ baby.image.url }}" class="card-img-top" alt="{{ baby.name }}"
+            style="height: 200px; object-fit: cover;">
+        {% else %}
+        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+            <i class="bi bi-person-fill text-secondary" style="font-size: 4rem;"></i>
+        </div>
+        {% endif %}
+
+        <div class="card-body text-center bg-white">
+            <h5 class="card-title fw-bold text-dark mb-3">{{ baby.name }}</h5>
+
+            <a href="/overview/{{ baby.pk }}/" class="btn btn-outline-primary btn-sm rounded-pill px-3">View
+                Profile</a>
+            <a href="/overview/{{ baby.pk }}/update/" class="btn btn-outline-secondary btn-sm rounded-pill px-3">Edit
+                Profile</a>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="text-center w-100 py-5">
+    <p class="text-muted fs-4">No babies tracked yet. Click the button above to start!</p>
+</div>
+{% endfor %}

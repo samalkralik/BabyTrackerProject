@@ -1,0 +1,45 @@
+{% extends 'baby_tracker_app/_base.html' %}
+
+{% block base_content %}
+<h1>Ajax based loading</h1>
+<div id="baby-list"></div>
+<button class="btn btn-outline-primary" id="load-button">Load Babies</button>
+
+
+<script>
+    // fetch retuns promise
+    // then reaguje na dokonceny prislib a muze vysledkem neco delat
+    let babiesUrl = "/overview-json/";
+
+    const loadButton = document.getElementById('load-button');
+
+    loadButton.addEventListener('click', e => {
+        fetch(babiesUrl)
+            .then(resp => {
+                return resp.json();
+            })
+            .then(json => {
+                const parent = document.getElementById("baby-list");
+
+                if (json.next) {
+                    babiesUrl = json.next;
+                }
+                else {
+                    loadButton.setAttribute("disabled", "")
+                }
+
+                json.babies.forEach(item => {
+                    const div = renderBaby(item);
+                    parent.appendChild(div)
+                });
+
+            });
+    });
+
+    function renderBaby(item) {
+        const div = document.createElement('div');
+        div.textContent = "#" + item.name;
+        return div;
+    }
+</script>
+{% endblock %}

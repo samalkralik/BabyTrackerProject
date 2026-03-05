@@ -10,6 +10,10 @@ def test_view(request, **kwargs):
 urlpatterns = [
     path("", views.index_view),
     path("overview/", views.overview_view),
+    path("overview-ajax/", views.overview_ajax),
+    path("overview-json/", views.overview_json),
+    path("overview-htmx/", views.overview_htmx),
+    path("overview-detail-htmx/", views.overview_detail_htmx),
     path("overview/add/", views.baby_create_view),
     path("overview/<int:baby_id>/", views.baby_detail_view),
     path("overview/<int:baby_id>/update/", views.baby_update_view),

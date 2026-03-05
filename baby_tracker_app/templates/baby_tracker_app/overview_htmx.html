@@ -1,0 +1,12 @@
+{% extends 'baby_tracker_app/_base.html' %}
+
+{% block base_content %}
+<h1>HTMX based loading</h1>
+
+<div id="baby-list" class="row row-cols-auto gy-4 justify-content-center"></div>
+<br><br>
+<button class="btn btn-outline-primary" hx-get="/overview-detail-htmx/" hx-target="#baby-list">Load Babies</button>
+
+<script defer src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+
+{% endblock %}

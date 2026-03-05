@@ -245,3 +245,59 @@ def growth_update_view(request, baby_id, growth_id):
         "baby_tracker_app/growth_update.html",
         {"form": form, "baby": baby, "growth": growth},
     )
+
+
+def overview_ajax(request):
+    """html page for ajax example"""
+    return render(request, "baby_tracker_app/overview_ajax.html")
+
+
+def overview_htmx(request):
+    """html page for htmx example"""
+    return render(request, "baby_tracker_app/overview_htmx.html")
+
+
+from django.http import JsonResponse
+
+
+def overview_json(request):
+    per_load = 2
+    startFrom = int(request.GET.get("startFrom") or 0)
+    until = startFrom + per_load
+
+    babies = Baby.objects.values("name", "gender")
+    babies = list(babies[startFrom:until])
+
+    if len(babies) < per_load:
+        next_url = None
+    else:
+        next_url = "/overview-json/?startFrom=" + str(until)
+
+    return JsonResponse(
+        {
+            "babies": babies,
+            "next": next_url,
+        }
+    )
+
+
+def overview_detail_htmx(request):
+    per_load = 2
+    startFrom = int(request.GET.get("startFrom") or 0)
+    until = startFrom + per_load
+
+    babies = Baby.objects.all()
+    babies = list(babies[startFrom:until])
+
+    if len(babies) < per_load:
+        next_url = None
+    else:
+        next_url = "/overview-json/?startFrom=" + str(until)
+
+    return render(
+        request,
+        "baby_tracker_app/include/overview.html",
+        {
+            "babies": babies,
+        },
+    )
