@@ -1,5 +1,7 @@
 {% extends 'baby_tracker_app/_base.html' %}
 
+{% load static %}
+
 {% block nav_links %}
 <li class="nav-item"><a class="nav-link fw-bold px-3" href="#about">About</a></li>
 <li class="nav-item"><a class="nav-link fw-bold px-3" href="#features">Features</a></li>
@@ -23,7 +25,30 @@
 
     <div class="col-lg-5 text-center">
         <div class="p-4 bg-white shadow-sm d-inline-block border border-5 border-light">
-            <img src="https://placehold.co/200" class="img-fluid" alt="Stroller Logo" style="max-width: 350px;">
+            <img src="{% static 'baby_tracker_app/index_image.jpg' %}" class="img-fluid" alt="Baby hand"
+                style="width: 100%;">
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-5">Why parents love our tracker</h3>
+        <div class="row">
+            <div class="col-lg-4">
+                <h5>Stress-Free Data</h5>
+                <p class="text-muted">No more guessing when the last feeding was. We handle the math so you can focus on
+                    bonding.</p>
+            </div>
+            <div class="col-lg-4">
+                <h5>Sync Across Devices</h5>
+                <p class="text-muted">Share access with partners, grandparents, or nannies so everyone is always in the
+                    loop.</p>
+            </div>
+            <div class="col-lg-4">
+                <h5>Insightful Charts</h5>
+                <p class="text-muted">Identify sleep regressions and growth spurts before they become a surprise.</p>
+            </div>
         </div>
     </div>
 </section>

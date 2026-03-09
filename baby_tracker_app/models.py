@@ -139,5 +139,21 @@ class Feeding(models.Model):
     def formatted_time(self):
         return self.time.strftime("%H:%M")
 
+    @property
+    def get_display_duration(self):
+        if not self.duration:
+            return ""
+
+        if self.duration < 60:
+            return f"{self.duration} sec"
+
+        if self.duration < 3600:
+            minutes = round(self.duration / 60, 1)
+            # removes .0 if it's a whole number
+            return f"{int(minutes) if minutes.is_integer() else minutes} min"
+
+        hours = round(self.duration / 3600, 1)
+        return f"{int(hours) if hours.is_integer() else hours} hr"
+
     def __str__(self):
         return f"{self.baby}'s feeding at {self.formatted_time}"

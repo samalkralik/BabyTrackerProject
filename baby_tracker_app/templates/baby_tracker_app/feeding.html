@@ -38,7 +38,8 @@
 
                         <div id="summary-fields" class="row g-2" style="display:none;">
                             <div class="col-6">{{ form.time|as_crispy_field }}</div>
-                            <div class="col-6">{{ form.duration|as_crispy_field }}</div>
+                            <input type="hidden" name="duration" id="id_duration"
+                                value="{{ form.duration.value|default:'' }}">
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mt-4 py-2 fw-bold">Save</button>
@@ -77,7 +78,9 @@
 
                                     {% else %}
                                     {# BREAST LOGIC (Left/Right) #}
-                                    {% if f.duration %}⏱️ {{ f.duration }}{% endif %}
+                                    {% if f.duration %}
+                                    {{ f.get_display_duration }}
+                                    {% endif %}
                                     {% endif %}
                                 </span>
                             </div>
@@ -126,9 +129,10 @@
 </div>
 
 <script>
-    let startTime, timerInterval, running = false;
+    let timerInterval, totalSeconds = 0, running = false;
     const typeSelect = document.querySelector('[name="feed_type"]');
     const startStopBtn = document.getElementById('startStopBtn');
+    const resetBtn = document.getElementById('resetBtn');
     const display = document.getElementById('display');
 
     const timerSection = document.getElementById('timer-section');
@@ -153,7 +157,6 @@
 
         const isBreast = (val == "1" || val == "2");
         timerSection.style.display = isBreast ? "block" : "none";
-
         bottleFields.style.display = (val == "3") ? "block" : "none";
         solidFields.style.display = (val == "4") ? "block" : "none";
         summaryFields.style.display = "flex";
@@ -161,47 +164,52 @@
         const durationCol = durationInput.closest('.col-6');
         if (durationCol) {
             durationCol.style.display = isBreast ? "block" : "none";
-
             timeInput.closest('.col-6').className = isBreast ? "col-6" : "col-12";
         }
     });
 
+    // 2. Timer Update Logic (Calculates Seconds)
+    function updateDisplay() {
+        totalSeconds++;
+        const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+        const s = (totalSeconds % 60).toString().padStart(2, '0');
+        display.textContent = `${m}:${s}`;
+
+        // Sync raw seconds to the hidden input field
+        durationInput.value = totalSeconds;
+    }
+
+    // 3. Start / Stop Logic
     startStopBtn.addEventListener('click', function () {
         if (!running) {
-            startTime = new Date();
-            const tzOffset = startTime.getTimezoneOffset() * 60000;
-            timeInput.value = new Date(startTime - tzOffset).toISOString().slice(0, 16);
+            // Set Start Time if starting from scratch
+            if (totalSeconds === 0) {
+                const now = new Date();
+                const tzOffset = now.getTimezoneOffset() * 60000;
+                timeInput.value = new Date(now - tzOffset).toISOString().slice(0, 16);
+            }
+
             timerInterval = setInterval(updateDisplay, 1000);
             this.textContent = "Stop";
             this.className = "btn btn-danger btn-lg w-100";
             running = true;
         } else {
             clearInterval(timerInterval);
-            const val = typeSelect.value;
-            if (val == "1" || val == "2") {
-                durationInput.value = display.textContent;
-            }
-
-            this.textContent = "Restart";
+            this.textContent = "Continue";
             this.className = "btn btn-warning btn-lg w-100";
             running = false;
         }
     });
 
-    function updateDisplay() {
-        const diff = Math.floor((new Date() - startTime) / 1000);
-        const m = Math.floor(diff / 60).toString().padStart(2, '0');
-        const s = (diff % 60).toString().padStart(2, '0');
-        display.textContent = `${m}:${s}`;
-    }
-
-    document.getElementById('resetBtn').addEventListener('click', () => {
+    // 4. Reset Logic
+    resetBtn.addEventListener('click', () => {
         clearInterval(timerInterval);
+        totalSeconds = 0;
         running = false;
         display.textContent = "00:00";
+        durationInput.value = "";
         startStopBtn.textContent = "Start";
         startStopBtn.className = "btn btn-success btn-lg w-100";
     });
 </script>
-
 {% endblock %}
