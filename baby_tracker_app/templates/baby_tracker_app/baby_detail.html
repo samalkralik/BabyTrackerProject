@@ -41,16 +41,16 @@
             <div class="card h-100 shadow-sm border-primary">
                 <div class="card-body text-center">
                     <h3 class="card-title">🍼 Feeding</h3>
-                    <p class="small text-muted">
-                        Last:
-                        {% if latest_feeding %}
-                        {{ latest_feeding.amount }}ml at
-                        {{ latest_feeding.time|date:"H:i"}}
-                        {% else %}No data
-                        {% endif %}
-                    </p>
+
+                    {% if latest_feeding %}
+                    <p class="small text-muted mb-0">Most recent feeding:</p>
+                    <p class="small text-muted mb-0">{{ latest_feeding.time|date:"H:i, M.d"}}</p>
+                    {% else %}
+                    <p class="small text-muted">No record</p>
+                    {% endif %}
+
                     <a href="/overview/{{ baby.pk }}/feeding/" class="btn btn-primary w-100 mt-2">Log
-                        Milk</a>
+                        Feeding</a>
                 </div>
             </div>
         </div>
@@ -59,12 +59,14 @@
             <div class="card h-100 shadow-sm border-success">
                 <div class="card-body text-center">
                     <h3 class="card-title">🌙 Sleep</h3>
-                    <p class="small text-muted">
-                        Last: {% if latest_sleep %}
-                        {{ latest_sleep.start_time|date:"d.m. H:i" }}
-                        {% else %}No data
-                        {%endif %}
-                    </p>
+
+                    {% if latest_sleep %}
+                    <p class="small text-muted mb-0">Most recent sleep:</p>
+                    <p class="small text-muted mb-0">{{ latest_sleep.start_time|date:"H:i, M.d"}}</p>
+                    {% else %}
+                    <p class="small text-muted">No record</p>
+                    {% endif %}
+
                     <a href="/overview/{{ baby.pk }}/sleep/" class="btn btn-success w-100 mt-2">Log
                         Sleep</a>
                 </div>
@@ -75,14 +77,16 @@
             <div class="card h-100 shadow-sm border-info">
                 <div class="card-body text-center">
                     <h3 class="card-title">📈 Growth</h3>
-                    <p class="small text-muted">
-                        Last Weight: {% if latest_growth %}
-                        {{ latest_growth.weight }}kg
-                        {% else %}No data
-                        {% endif %}
-                    </p>
-                    <a href="/overview/{{ baby.pk }}/growth/" class="btn btn-info text-white w-100 mt-2">Update
-                        Stats</a>
+
+                    {% if latest_growth %}
+                    <p class="small text-muted mb-0">Most recent measurement:</p>
+                    <p class="small text-muted mb-0">{{ latest_growth.date|date:"M.d"}}</p>
+                    {% else %}
+                    <p class="small text-muted">No record</p>
+                    {% endif %}
+
+                    <a href="/overview/{{ baby.pk }}/growth/" class="btn btn-info text-white w-100 mt-2">Log
+                        Measurement</a>
                 </div>
             </div>
         </div>

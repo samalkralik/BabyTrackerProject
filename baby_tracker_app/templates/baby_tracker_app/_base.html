@@ -11,9 +11,9 @@
 
     <style>
         .app-container {
-            max-width: 1100px;
-            margin-left: auto;
-            margin-right: auto;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
             width: 100%;
         }
     </style>
@@ -21,6 +21,7 @@
 
 <body
     style="font-family: 'Quicksand', sans-serif; background-color: #fbfbf2; color: #4a4a4a; margin: 0; line-height: 1.6;">
+
     <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
@@ -59,7 +60,10 @@
                     <li class="nav-item fw-bold mt-2 mt-lg-0 ms-lg-2">
                         <form action="/accounts/logout/" method="post">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3">Log Out</button>
+                            <button type="submit" class="btn btn-sm rounded-pill px-3 fw-bold"
+                                style="color: #000000; border: none;">
+                                Log Out
+                            </button>
                         </form>
                     </li>
                     {% else %}
@@ -71,7 +75,7 @@
             </div>
         </div>
     </nav>
-
+    // TODO: button save in Edit Feeding, doesnt save duration. 2. do i need user profile
     <main class="container">
         {% block base_content %}
         {% endblock %}

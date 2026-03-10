@@ -37,7 +37,7 @@
                         </div>
 
                         <div id="summary-fields" class="row g-2" style="display:none;">
-                            <div class="col-6">{{ form.time|as_crispy_field }}</div>
+                            <div class="col-12">{{ form.time|as_crispy_field }}</div>
                             <input type="hidden" name="duration" id="id_duration"
                                 value="{{ form.duration.value|default:'' }}">
                         </div>
@@ -68,16 +68,16 @@
                                 <span class="ms-1">- {{ f.get_feed_type_display }}</span>
                                 <span class="small text-muted">
                                     {% if f.feed_type == 3 %}
-                                    {# BOTTLE LOGIC #}
+                                    {# BOTTLE #}
                                     {% if f.amount %}{{ f.amount }} ml{% endif %}
                                     {% if f.milk_type %}{{ f.get_milk_type_display }}{% endif %}
 
                                     {% elif f.feed_type == 4 %}
-                                    {# SOLID LOGIC #}
+                                    {# SOLID #}
                                     {% if f.note %}{{ f.note|truncatechars:50 }}{% endif %}
 
                                     {% else %}
-                                    {# BREAST LOGIC (Left/Right) #}
+                                    {# BREAST #}
                                     {% if f.duration %}
                                     {{ f.get_display_duration }}
                                     {% endif %}

@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from baby_tracker_app.models import Baby, Feeding, Sleep, Growth
 from baby_tracker_app.forms import BabyTrackerForm, FeedingForm, SleepForm, GrowthForm
+from django.db.models.functions import ExtractMonth, ExtractYear
+import json
 
 
 def index_view(request):
@@ -123,7 +125,6 @@ def feeding_update_view(request, baby_id, feeding_id):
     if request.method == "POST":
         if "delete" in request.POST:
             feeding.delete()
-            # Redirect to the main feeding list for this baby
             return redirect(f"/overview/{baby_id}/feeding/")
 
         form = FeedingForm(request.POST, instance=feeding)
@@ -206,7 +207,6 @@ def growth_view(request, baby_id):
             instance.baby = baby
             instance.save()
             return redirect(request.path)
-            # return redirect("/overview/{baby.id}/growth/", baby_id=baby.id)
     else:
         form = GrowthForm()
 
@@ -216,10 +216,28 @@ def growth_view(request, baby_id):
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
 
+    weight_qs = growth_tracks.filter(weight__isnull=False).order_by("date")
+    height_qs = growth_tracks.filter(height__isnull=False).order_by("date")
+
+    # Now extract data independently
+    chart_dates_w = [g.date.strftime("%b %d") for g in weight_qs]
+    chart_weights = [float(g.weight) for g in weight_qs]
+
+    chart_dates_h = [g.date.strftime("%b %d") for g in height_qs]
+    chart_heights = [float(g.height) for g in height_qs]
+
     return render(
         request,
         "baby_tracker_app/growth.html",
-        {"baby": baby, "form": form, "page": page},
+        {
+            "baby": baby,
+            "form": form,
+            "page": page,
+            "chart_dates_w": json.dumps(chart_dates_w),
+            "chart_weights": json.dumps(chart_weights),
+            "chart_dates_h": json.dumps(chart_dates_h),
+            "chart_heights": json.dumps(chart_heights),
+        },
     )
 
 

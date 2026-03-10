@@ -8,66 +8,87 @@
 {% endblock %}
 
 {% block base_content %}
-<section class="row align-items-center py-5 my-lg-5">
-    <div class="col-lg-7 text-center text-lg-start mb-5 mb-lg-0">
-        <h1 class="display-4 fw-bold text-dark mb-4 lh-sm">
-            Welcome to your <span class="text-success">personalized</span> baby tracker app!
-        </h1>
-        <h2 class="h4 text-muted mb-5 lh-base">
-            Helping you navigate the ups and downs of your baby's behavior with ease and confidence.
-        </h2>
-
-        <a href="{% if user.is_authenticated %}/overview/{% else %}/accounts/login/{% endif %}"
-            class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow-sm fw-bold border-0">
-            GET STARTED NOW! <i class="bi bi-arrow-right-short ms-2"></i>
-        </a>
-    </div>
-
-    <div class="col-lg-5 text-center">
-        <div class="p-4 bg-white shadow-sm d-inline-block border border-5 border-light">
-            <img src="{% static 'baby_tracker_app/index_image.jpg' %}" class="img-fluid" alt="Baby hand"
-                style="width: 100%;">
+<section class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-lg-7 text-center text-lg-start mb-5 mb-lg-0">
+            <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 mb-3 fw-bold">
+                Trusted by 1,000+ parents
+            </span>
+            <h1 class="display-5 fw-bold text-dark mb-4" style="max-width: 600px;">
+                Track your baby's world, <span class="text-success">effortlessly</span>.
+            </h1>
+            <p class="lead text-muted mb-5" style="max-width: 500px;">
+                Navigate parenting with confidence. Keep feeding, sleep, and growth milestones in one beautiful, simple
+                place.
+            </p>
+            <a href="{% if user.is_authenticated %}/overview/{% else %}/accounts/login/{% endif %}"
+                class="btn btn-success btn-lg rounded-pill px-5 py-3 shadow-sm fw-bold">
+                Get Started Free
+            </a>
         </div>
-    </div>
-</section>
-
-<section class="py-5 bg-light">
-    <div class="container text-center">
-        <h3 class="fw-bold mb-5">Why parents love our tracker</h3>
-        <div class="row">
-            <div class="col-lg-4">
-                <h5>Stress-Free Data</h5>
-                <p class="text-muted">No more guessing when the last feeding was. We handle the math so you can focus on
-                    bonding.</p>
-            </div>
-            <div class="col-lg-4">
-                <h5>Sync Across Devices</h5>
-                <p class="text-muted">Share access with partners, grandparents, or nannies so everyone is always in the
-                    loop.</p>
-            </div>
-            <div class="col-lg-4">
-                <h5>Insightful Charts</h5>
-                <p class="text-muted">Identify sleep regressions and growth spurts before they become a surprise.</p>
+        <div class="col-lg-5 text-center">
+            <div class="position-relative d-inline-block">
+                <div class="position-absolute bg-success opacity-10 rounded-circle"
+                    style="width: 300px; height: 300px; top: -50px; right: -50px;"></div>
+                <img src="{% static 'baby_tracker_app/index_image.jpg' %}"
+                    class="img-fluid rounded-4 shadow-lg position-relative" alt="Baby hand">
             </div>
         </div>
     </div>
 </section>
 
-<hr class="opacity-10 my-5">
+<section class="row align-items-center py-5">
+    <div class="container d-flex flex-wrap align-items-center">
+        <div class="col-lg-5 text-center order-lg-1 order-2">
+            <div class="position-relative d-inline-block">
+                <div class="position-absolute bg-success opacity-10 rounded-circle"
+                    style="width: 250px; height: 250px; top: 260px; left: 260px; z-index: 0;"></div>
 
-<div id="about" class="container py-5 text-center">
+                <img src="{% static 'baby_tracker_app/index_image_feet.jpg' %}"
+                    class="img-fluid rounded-4 shadow-sm position-relative" style="z-index: 1;" alt="Baby feet">
+            </div>
+        </div>
+
+        <div class="col-lg-7 ps-lg-5 order-lg-2 order-1 mb-5 mb-lg-0">
+            <span class="text-uppercase text-success fw-bold small">Every detail matters</span>
+            <h2 class="display-6 fw-bold text-dark mb-3">From their first steps to their daily routines.</h2>
+            <p class="text-muted lead">
+                Our mission is to help you track the small moments that make up the big picture of your baby's growth
+                and well-being.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section id="about" class="container py-5 text-center">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <span class="badge rounded-pill text-danger px-4 py-2 mb-4 fw-bold text-uppercase"
-                style="letter-spacing: 1px;">
-                Our Mission
-            </span>
-            <h2 class="display-7 fw-bold text-dark mb-3">
-                Making parenting easier by keeping growth milestones and sleep schedules all in one place.
-            </h2>
+            <h2 class="fw-bold text-dark mb-3">Built for parents, by parents.</h2>
+            <p class="lead text-muted mb-5">
+                We believe that the early days of parenting should be about bonding, not managing spreadsheets or lost
+                notes. Our mission is to keep growth milestones, feeding logs, and sleep patterns organized so you can
+                focus on what truly matters.
+            </p>
+            <div class="row g-4 text-start">
+                <div class="col-md-6">
+                    <div class="card border-0 bg-light p-4 rounded-4 h-100">
+                        <h5 class="fw-bold text-success mb-2">🛡️ 100% Secure</h5>
+                        <p class="mb-0 text-muted">Your family's data is private and always encrypted.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 bg-light p-4 rounded-4 h-100">
+                        <h5 class="fw-bold text-success mb-2">✨ Simple Design</h5>
+                        <p class="mb-0 text-muted">Clean interface designed for tired, busy parents.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
+
+
+<hr class="opacity-10">
 
 <div id="features" class="container py-5">
     <div class="row g-4 text-center">

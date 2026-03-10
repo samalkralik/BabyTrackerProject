@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12 mb-4">
             <div class="card shadow-sm border-info">
                 <div class="card-body pb-0">
                     <h3 class="fw-bold text-info mb-3">📋 Growth History</h3>
@@ -94,6 +94,55 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow-sm border-info">
+                <div class="card-body">
+                    <h3 class="fw-bold text-info mb-3">📊 Statistics</h3>
+
+                    <div class="row">
+                        <div class="col-md-12 mb-4">
+                            <canvas id="weightChart"></canvas>
+                        </div>
+                        <div class="col-md-12">
+                            <canvas id="heightChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="growth-data" data-dates-w="{{ chart_dates_w }}" data-weights="{{ chart_weights }}"
+                data-dates-h="{{ chart_dates_h }}" data-heights="{{ chart_heights }}" style="display: none;">
+            </div>
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                // 1. Retrieve the data from the HTML attributes
+                const dataEl = document.getElementById('growth-data');
+
+                const datesW = JSON.parse(dataEl.dataset.datesW);
+                const weights = JSON.parse(dataEl.dataset.weights);
+
+                const datesH = JSON.parse(dataEl.dataset.datesH);
+                const heights = JSON.parse(dataEl.dataset.heights);
+
+                // 2. Helper function to keep code clean
+                const renderChart = (canvasId, label, dates, data, color) => {
+                    new Chart(document.getElementById(canvasId).getContext('2d'), {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [{ label, data, borderColor: color, fill: false, tension: 0.2 }]
+                        },
+                        options: { responsive: true }
+                    });
+                };
+
+                // 3. Initialize both charts
+                renderChart('weightChart', 'Weight (kg)', datesW, weights, '#0dcaf0');
+                renderChart('heightChart', 'Height (cm)', datesH, heights, '#6610f2');
+            </script>
         </div>
     </div>
 </div>
