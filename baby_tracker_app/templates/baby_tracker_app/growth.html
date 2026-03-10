@@ -36,10 +36,10 @@
                                     <th>Date</th>
                                     <th>Weight (kg)</th>
                                     <th>Height (cm)</th>
+                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% for g in page %}
+                            <tbody>{% for g in page %}
                                 <tr class="align-middle">
                                     <td>{{ g.date|date:"d.m.Y" }}</td>
                                     <td class="fw-bold text-dark">{{ g.weight }} kg</td>
@@ -59,7 +59,7 @@
                                 </tr>
                                 {% empty %}
                                 <tr>
-                                    <td colspan="3" class="text-center text-muted">No measurements recorded yet.</td>
+                                    <td colspan="4" class="text-center text-muted">No measurements recorded yet.</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
