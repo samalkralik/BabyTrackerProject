@@ -146,7 +146,7 @@ EMAIL_USE_TLS = True  # Use secure connection
 EMAIL_USE_SSL = False  # Usually one or the other, TLS is more common for 587
 
 # decouple
-EMAIL_HOST_USER = config("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default=None)
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default=None)
 
 DEFAULT_FROM_EMAIL = "Baby Tracker <your-email@gmail.com>"
