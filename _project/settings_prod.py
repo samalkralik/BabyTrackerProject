@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -137,3 +138,16 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
+
+EMAIL_BACKEND = config("EMAIL_BACKEND")
+EMAIL_HOST = "smtp.gmail.com"  # or your SMTP server address
+EMAIL_PORT = 587  # Standard port for TLS
+EMAIL_USE_TLS = True  # Use secure connection
+EMAIL_USE_SSL = False  # Usually one or the other, TLS is more common for 587
+
+# decouple
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = "Baby Tracker <your-email@gmail.com>"
+ACCOUNT_EMAIL_VERIFICATION = "none"
