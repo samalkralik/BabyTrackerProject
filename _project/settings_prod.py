@@ -139,7 +139,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-EMAIL_BACKEND = config("EMAIL_BACKEND")
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"  # or your SMTP server address
 EMAIL_PORT = 587  # Standard port for TLS
 EMAIL_USE_TLS = True  # Use secure connection
