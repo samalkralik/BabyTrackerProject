@@ -216,10 +216,10 @@ def growth_view(request, baby_id):
     page_number = request.GET.get("page")
     page = paginator.get_page(page_number)
 
+    #filter for none values
     weight_qs = growth_tracks.filter(weight__isnull=False).order_by("date")
     height_qs = growth_tracks.filter(height__isnull=False).order_by("date")
 
-    # Now extract data independently
     chart_dates_w = [g.date.strftime("%b %d") for g in weight_qs]
     chart_weights = [float(g.weight) for g in weight_qs]
 
